@@ -1,0 +1,17 @@
+// Ten loop-carried values plus the counter fit the coloring register budget.
+use io
+
+main(args:int[][]) {
+  i:int,a:int,b:int,c:int,d:int,e:int = 0,1,2,3,4,5
+  f:int,g:int,h:int,j:int,k:int = 6,7,8,9,10
+  while i < 90000000 {
+    a = a + b + 3; b = b + c + 5
+    c = c + d + 7; d = d + e + 11
+    e = e + f + 13; f = f + g + 17
+    g = g + h + 19; h = h + j + 23
+    j = j + k + 29; k = k + a + i
+    i = i + 1
+  }
+  printi(a + b + c + d + e + f + g + h + j + k)
+  println("")
+}

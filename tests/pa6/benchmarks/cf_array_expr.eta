@@ -1,0 +1,15 @@
+// Literal index and value expressions should fold before the hot loop.
+use io
+
+main(args:int[][]) {
+  a:int[8]
+  i:int = 0
+  live:int = 1
+  while i < 120000000 {
+    a[(3 * 7 + 5) % 8] = live + (99 * 17 - 84 / 3 + 55 % 6)
+    live = live + a[(40 - 12) / 7] + (1234 * 5 - 6789 / 3)
+    i = i + 1
+  }
+  printi(live)
+  println("")
+}

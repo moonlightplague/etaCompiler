@@ -1,0 +1,13 @@
+// testing procedure calls
+use io
+
+f() {
+  x: int = 1
+  println("testing procedure call")
+}
+
+main(args: int[][]) {
+  println("before procedure call")
+  f()
+  println("after procedure call")
+}

@@ -1,0 +1,7 @@
+//dangling else
+main(){
+    a : int, b : int, c : int = 1, 2, 3
+    if (a == b) c = b
+    else if (a == b) c = b
+    else c = b
+}

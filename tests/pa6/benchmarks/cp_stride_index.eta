@@ -1,0 +1,17 @@
+// Constant bound, stride, and index expressions recur in the loop.
+use io
+
+main(args:int[][]) {
+  a:int[8]
+  i:int = 0
+  live:int = 1
+  limit:int,step:int,base:int = 120000000,1,6
+  while i < limit {
+    idx:int = base - step - step
+    a[idx] = live + idx
+    live = live + a[idx] + base * step
+    i = i + step
+  }
+  printi(live)
+  println("")
+}

@@ -1,0 +1,2 @@
+//abnormal test case for equality
+true == "Hi"

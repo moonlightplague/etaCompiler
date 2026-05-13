@@ -1,0 +1,18 @@
+use io 
+use conv 
+
+main(arg:int[][]) {
+    a : int = 1
+    b : int = a + 10
+    c : int = a * 4
+    d : int = a * 2 + 1
+    e : int = a + b
+    f : int = a + b * 2
+    g : int = a + b * 4 + 100
+    println(unparseInt(b))
+    println(unparseInt(c))
+    println(unparseInt(d))
+    println(unparseInt(e))
+    println(unparseInt(f))
+    println(unparseInt(g))
+}

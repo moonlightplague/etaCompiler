@@ -1,0 +1,12 @@
+//33
+use io
+
+main(args:int[][]) {
+  a:int[] = {11, 22, 33, 44}
+  i:int = 2
+  j:int = i
+  k:int = j
+  v:int = a[k]
+  printi(v)
+  println("")
+}

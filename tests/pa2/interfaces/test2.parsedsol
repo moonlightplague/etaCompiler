@@ -1,0 +1,19 @@
+( ()
+  (
+    print
+    ((str ([] int)))
+    ()
+    println
+    ((str ([] int)))
+    ()
+    readln
+    ()
+    (([] int))
+    getchar
+    ()
+    ()
+    eof
+    ()
+    (bool)
+  )
+)

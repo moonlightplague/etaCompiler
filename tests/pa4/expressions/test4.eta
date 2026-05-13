@@ -1,0 +1,11 @@
+// test integers and minus unary operator
+use io
+use conv
+
+main(args: int[][]) {
+  n: int = 1
+  neg_n: int = -n
+  neg_one: int = -1
+  zero: int = 0
+  println("neg_n is " + unparseInt(neg_n))
+}

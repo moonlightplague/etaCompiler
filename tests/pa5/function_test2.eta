@@ -1,0 +1,15 @@
+use io
+use conv
+
+decathlon(x: int): int, int, int, int, int, int, int, int, int, int {
+    return x, x+1, x+2, x+3, x+4, x+5, x+6, x+7, x+8, x+9
+}
+
+main(args: int[][]) {
+    // Extract only a few values, discarding the rest to test the '_' assignment
+    v0:int, _, v2:int, _, v4:int, _, v6:int, _, v8:int, _ = decathlon(10)
+    
+    // 10 + 12 + 14 + 16 + 18 = 70
+    sum: int = v0 + v2 + v4 + v6 + v8
+    println(unparseInt(sum)); // Expected: 70
+}

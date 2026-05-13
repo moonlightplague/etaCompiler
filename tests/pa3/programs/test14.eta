@@ -1,0 +1,7 @@
+// EXPECT: FAIL
+main(args:int[][]) {
+  x:int = 1
+  {
+    x:int = 2
+  }
+}

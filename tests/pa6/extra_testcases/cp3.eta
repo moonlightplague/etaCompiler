@@ -1,0 +1,19 @@
+//12
+use io
+
+main(args:int[][]) {
+  a:int = 3
+  b:int = 4
+  x:int = 0
+  if a + b == 7 {
+    if b > a {
+      x = 12
+    } else {
+      x = 99
+    }
+  } else {
+    x = 100
+  }
+  printi(x)
+  println("")
+}

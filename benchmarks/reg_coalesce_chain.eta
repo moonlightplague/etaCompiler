@@ -1,0 +1,17 @@
+// The hot loop is mostly copy chains that move coalescing can erase.
+use io
+
+main(args:int[][]) {
+  i:int = 0
+  acc:int = 1
+  while i < 120000000 {
+    a:int = acc; b:int = a; c:int = b; d:int = c
+    e:int = d; f:int = e; g:int = f; h:int = g
+    acc = h + i
+    x:int = acc; y:int = x; z:int = y
+    acc = z + a + c + e + g
+    i = i + 1
+  }
+  printi(acc)
+  println("")
+}

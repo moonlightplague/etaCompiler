@@ -1,0 +1,43 @@
+// EXPECT: OK
+use BigA
+use BigB
+
+g0:int = 0
+g1:bool = true
+g2:int = 'Z'
+g3:int = 9223372036854775807  
+
+buf:int[]
+
+main(args:int[][]) {
+  s:int[] = "jyfcjyrdnghjyft"
+  dbg(s)
+
+  empty:int[] = {}
+  xs:int[] = {1, 2, 3, 4, 5,}
+
+  buf = xs + empty
+  n:int = len(buf)
+
+  q:int, r:int = divmod(100, 7)
+  _, r2:int = divmod(9, 2)
+
+  A:int[][] = mk2d(3, 4)
+  i:int = 0
+  while (i < 3) {
+    j:int = 0
+    while (j < 4) {
+      A[i][j] = sum(mul(i, 10), j)
+      j = j + 1
+    }
+    i = i + 1
+  }
+
+  rr:int[] = row(A, 1)
+  cc:int[] = col(A, 2)
+
+  packed:int[] = pack(1,2,3,4,5,6,7,8)
+  a:int, b:int, c:int, d:int = unpack(packed)
+
+  noop()
+}

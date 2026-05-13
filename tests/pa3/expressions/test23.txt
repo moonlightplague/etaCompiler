@@ -1,0 +1,2 @@
+//tricky normal test case for array addition
+{{{}}} + {{{}, {1,2},{}}}

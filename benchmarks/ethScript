@@ -1,0 +1,84 @@
+# eth test script
+#
+# This file is a test script for eth (etac Test Harness).  It
+# conforms to the following grammar:
+#
+#   ScriptFile      ::= Commands+
+#   Command         ::= build
+#                     | CompilerTest
+#   CompilerTest    ::= TestKind (\(TestName\))? ([TestPath])? ("CmdLineArgs")?
+#                           { (FileTest;)* }
+#   TestKind        ::= etac
+#   TestName        ::= LitString
+#   FileTest        ::= Filenames Description? FailureSet?
+#   Filenames       ::= Filename+
+#   Description     ::= LitString
+#   FailureSet      ::= Failure (, Failure)*
+#   Failure         ::= \( ErrorKind \)
+#                     | \( ErrorKind, LitString \)
+#
+#   TestPath        :   the path to the test files, enclosed in quotes,
+#                       relative to the path given in eth's -testpath flag.
+#   CmdLineArgs     :   command-line arguments for etac
+#   Filename        :   the name of a file, interpreted from TestPath.
+#   LitString       :   a literal string, enclosed in quotes.
+#   ErrorKind       :   one of, or a unique prefix of one of the following
+#                       strings: "Lexical Error", "Syntax Error", or
+#                       "Semantic Error".
+#
+# eth runs the commands in order of appearance.
+
+# build compiler first
+build
+
+etac ("Test --help") "--help" {
+    ;
+}
+
+etac ("Test --report-opts") "--report-opts" {
+    ;
+}
+
+etac ("Benchmark test cases: Test -target linux") "-libpath $(testpath) -target linux" {
+    cf_array_expr.eta;
+    cf_branch_hot.eta;
+    cf_literal_chain.eta;
+    copy_array_index.eta;
+    copy_branch_join.eta;
+    copy_call_args.eta;
+    copy_chain_hot.eta;
+    cp_arith_hot.eta;
+    cp_branch_hot.eta;
+    cp_stride_index.eta;
+    dce_branch_noise.eta;
+    dce_chain_hot.eta;
+    dce_nested_noise.eta;
+    reg_call_survivors.eta;
+    reg_coalesce_chain.eta;
+    reg_ring_pressure.eta;
+    vn_arith_hot.eta;
+    vn_commute_hot.eta;
+    vn_tree_hot.eta;
+}
+
+etac ("Benchmark test cases: Test -target linux -O") "-libpath $(testpath) -target linux -O" {
+    cf_array_expr.eta;
+    cf_branch_hot.eta;
+    cf_literal_chain.eta;
+    copy_array_index.eta;
+    copy_branch_join.eta;
+    copy_call_args.eta;
+    copy_chain_hot.eta;
+    cp_arith_hot.eta;
+    cp_branch_hot.eta;
+    cp_stride_index.eta;
+    dce_branch_noise.eta;
+    dce_chain_hot.eta;
+    dce_nested_noise.eta;
+    reg_call_survivors.eta;
+    reg_coalesce_chain.eta;
+    reg_ring_pressure.eta;
+    vn_arith_hot.eta;
+    vn_commute_hot.eta;
+    vn_tree_hot.eta;
+}

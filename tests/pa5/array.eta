@@ -1,0 +1,9 @@
+use io 
+use conv 
+
+a: int = 1
+
+main(arg: int[][]) {
+    a = 2
+    println(unparseInt(a))
+}

@@ -1,0 +1,17 @@
+record Left {
+    value: int
+}
+
+record Right {
+    value: int
+}
+
+same(left: Left, right: Right): bool {
+    return left == right
+}
+
+main(args: int[][]) {
+    left: Left = Left(1)
+    right: Right = Right(1)
+    answer: bool = same(left, right)
+}

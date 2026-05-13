@@ -1,0 +1,12 @@
+agent = stress-bot
+route score = 184
+route steps = 5
+route ok = false
+last = (20,30)
+bucket count = 5
+bucket checksum = 81
+bucket through 13 = 68
+bounds area = 600
+grid visited = 15
+grid score = 66
+route length = 6

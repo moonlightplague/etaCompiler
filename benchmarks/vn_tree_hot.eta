@@ -1,0 +1,17 @@
+// The same expression tree appears several times before operands change.
+use io
+
+main(args:int[][]) {
+  i:int = 0
+  live:int = 0
+  a:int,b:int,c:int = 23,29,31
+  while i < 100000000 {
+    x:int = (a + b) * (b + c) - (a * c)
+    y:int = (a + b) * (b + c) - (a * c)
+    z:int = ((a + b) * (b + c)) + x - y
+    live = live + x + y + z + i
+    a = a + 1; b = b + 3; c = c + 5; i = i + 1
+  }
+  printi(live)
+  println("")
+}

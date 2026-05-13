@@ -1,0 +1,18 @@
+// LVN should reuse equivalent commuted add and multiply expressions.
+use io
+
+main(args:int[][]) {
+  i:int = 0
+  live:int = 0
+  p:int,q:int,r:int,s:int = 11,13,17,19
+  while i < 110000000 {
+    a:int = (p + q) * (r + s)
+    b:int = (q + p) * (s + r)
+    c:int = (p * r) + (q * s)
+    d:int = (r * p) + (s * q)
+    live = live + a + b + c + d + i
+    p = p + 1; q = q + 1; i = i + 1
+  }
+  printi(live)
+  println("")
+}

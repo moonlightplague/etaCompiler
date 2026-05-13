@@ -1,0 +1,68 @@
+// Expected output:
+// 10
+// 15
+// 66
+// 122
+//
+// Mutual recursion, local array mutation, short-circuit side effects, and
+// multi-assignment create long live ranges around branches and calls.
+use io
+use conv
+
+tick(counter:int[], v:int, result:bool):bool {
+    counter[0] = counter[0] + v
+    return result
+}
+
+sumdown(n:int):int {
+    if n == 0 {
+        return 0
+    } else {
+        return n + sumdown(n - 1)
+    }
+}
+
+odd_sum(n:int):int {
+    if n == 0 {
+        return 0
+    } else {
+        return n + even_sum(n - 1)
+    }
+}
+
+even_sum(n:int):int {
+    if n == 0 {
+        return 0
+    } else {
+        return n + odd_sum(n - 1)
+    }
+}
+
+quartet(x:int): int, int, int, int {
+    return x, x + 1, x + 2, x + 3
+}
+
+main(args:int[][]) {
+    counter:int[] = {0}
+
+    if tick(counter, 1, true) | tick(counter, 100, true) {
+        counter[0] = counter[0]
+    }
+    if tick(counter, 2, false) & tick(counter, 100, true) {
+        counter[0] = counter[0] + 1000
+    } else {
+        counter[0] = counter[0]
+    }
+    if tick(counter, 3, false) | tick(counter, 4, true) {
+        counter[0] = counter[0]
+    }
+
+    base:int = sumdown(5)
+    a:int, b:int, c:int, d:int = quartet(base)
+    weave:int = odd_sum(6) + even_sum(4)
+
+    println(unparseInt(counter[0]))
+    println(unparseInt(base))
+    println(unparseInt(a + b + c + d))
+    println(unparseInt(weave + counter[0] + base + a + b + c + d))
+}

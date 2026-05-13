@@ -1,0 +1,30 @@
+// a larger test case to test if the lexer's error reporting capability is correct
+use io
+use conv
+
+MAX_SIZE: int = 2048
+DEBUG: bool = true
+
+process(data: int[]): int, bool {
+    len: int = length(data)
+    if (len < 1) {
+        return 0, false
+    }
+    return data[0], true
+}
+
+main(args: int[][]) {
+    x: int = 10
+    y: int = 20
+
+    z: int = x *>> y
+
+    msg: int[] = "Starting calculation..." + '\x{000A}'
+    println(msg)
+
+    if (x + y < y) {
+        println("X is smaller")
+    } else {
+        println("X is larger")
+    }
+}

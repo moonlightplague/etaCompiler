@@ -1,0 +1,14 @@
+// testing empty array concatenation
+use io
+use conv
+
+main(args: int[][]) {
+  x: int[] = {1,2,3}
+  y: int[] = {}
+  y2: int[] = {}
+
+  z: int[] = x + y
+  z2: int[] = y + y2
+  println("length of z: " + unparseInt(length(z)))
+  println("length of z2: " + unparseInt(length(z2)))
+}

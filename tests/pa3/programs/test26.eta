@@ -1,0 +1,8 @@
+// EXPECT: FAIL (parameters must not shadow existing names in top-level environment)
+x:int = 0
+
+f(x:int):int {
+  return x
+}
+
+main(args:int[][]) { }

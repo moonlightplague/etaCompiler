@@ -1,0 +1,6 @@
+// EXPECT: FAIL
+main(args:int[][]) {
+  err1:int[] = {1, 2, 3}
+
+  err2:int[][3]
+}

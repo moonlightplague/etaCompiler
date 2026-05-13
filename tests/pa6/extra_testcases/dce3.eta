@@ -1,0 +1,16 @@
+//15
+use io
+
+main(args:int[][]) {
+  x:int = 10
+  dead:int = 0
+  if x > 3 {
+    dead = 111
+    dead = 222
+    x = x + 5
+  } else {
+    dead = 333
+  }
+  printi(x)
+  println("")
+}

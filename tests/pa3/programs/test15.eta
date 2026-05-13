@@ -1,0 +1,5 @@
+// EXPECT: FAIL (x not in scope at first assignment)
+main(args:int[][]) {
+  x = 1
+  x:int = 0
+}

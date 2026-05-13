@@ -1,0 +1,11 @@
+use io
+use conv
+
+main(args: int[][]) {
+    x: int, y: int, z: int = 1, 2, 3
+    println("Original: x, y, z = " + unparseInt(x) + ", " + unparseInt(y) + ", " + unparseInt(z))
+    x, y = y, x
+    println("Swap x and y: x, y = " + unparseInt(x) + ", " + unparseInt(y))
+    x, y, z = z, x, y
+    println("Swap xyz: x, y, z = " + unparseInt(x) + ", " + unparseInt(y) + ", " + unparseInt(z))
+}

@@ -1,0 +1,12 @@
+//169
+use io
+
+main(args:int[][]) {
+  x:int = 8
+  y:int = 5
+  a:int = x + y
+  b:int = x + y
+  c:int = a * b
+  printi(c)
+  println("")
+}

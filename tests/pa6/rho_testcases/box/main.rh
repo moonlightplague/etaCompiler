@@ -1,0 +1,5 @@
+use box
+
+main(args: int[][]) {
+    box: Box = Box(99)
+}

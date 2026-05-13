@@ -1,0 +1,7 @@
+// abnormal test case: return where no return type exists
+main(args: int[][]) {
+  x: int
+  x = 1
+  y: bool = true;
+  return 1;
+}

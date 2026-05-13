@@ -1,0 +1,10 @@
+use io
+use conv
+
+main(args: int[][]) {
+    a: int = 1
+    b: int = a + 2147483647
+    c: int = a + (-2147483648)
+    println(unparseInt(b))
+    println(unparseInt(c))
+}

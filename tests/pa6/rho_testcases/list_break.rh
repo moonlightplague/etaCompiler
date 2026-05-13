@@ -1,0 +1,45 @@
+// Expected output:
+// empty list
+// sum through 7 = 18
+// sum through 17 = 32
+
+use io
+use conv
+
+record Node {
+    value: int
+    next: Node
+}
+
+push(front: Node, value: int): Node {
+    return Node(value, front)
+}
+
+sumUntil(front: Node, stop: int): int {
+    total: int
+    current: Node = front
+    while (current != null) {
+        total = total + current.value
+        if (current.value == stop) {
+            break
+        }
+        current = current.next
+    }
+    return total
+}
+
+main(args: int[][]) {
+    list: Node
+    if (list == null) {
+        println("empty list")
+    }
+
+    list = push(list, 4)
+    list = push(list, 7)
+    list = push(list, 2)
+    list = push(list, 9)
+
+    println("sum through 7 = " + unparseInt(sumUntil(list, 7)))
+    list.next.value = list.next.value + 10
+    println("sum through 17 = " + unparseInt(sumUntil(list, 17)))
+}

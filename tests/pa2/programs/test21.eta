@@ -1,0 +1,14 @@
+use io
+
+global_var: int = 10
+
+// ERROR 1: 'use' directive appearing after a definition
+use utils
+
+main(args: int[][]) {
+    // ERROR 2: C-style declaration (int x) instead of Pascal-style (x: int)
+    int x = 5
+
+    // ERROR 3: Missing assignment operator or semicolon (depending on grammar strictness)
+    y: int 10
+}

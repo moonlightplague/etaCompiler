@@ -1,0 +1,35 @@
+// testing while
+use io
+
+main(args: int[][]) {
+  x: int = 0
+  y: bool = true
+  y2: bool = false
+
+  while (false) {
+    println("should not print")
+    x = 1
+  }
+
+  while (!y) {
+    println("should not print")
+    x = 2
+  }
+
+  while (y) {
+    println("while y should print once")
+    y = false
+  }
+  y = true
+
+  while (y & y2) {
+    println("should not print")
+    x = 3
+  }
+
+  while (y | y2) {
+    println("while y or y2 should print once")
+    x = 4
+    y = false
+  }
+}

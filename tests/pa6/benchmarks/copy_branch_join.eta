@@ -1,0 +1,21 @@
+// Both sides of the branch build copies before the joined hot path.
+use io
+
+main(args:int[][]) {
+  i:int = 0
+  acc:int = 3
+  while i < 80000000 {
+    src:int = acc + i
+    left:int = src; right:int = src
+    if i % 2 == 0 {
+      p:int = left; q:int = p; acc = q + 1
+    } else {
+      r:int = right; s:int = r; acc = s + 3
+    }
+    a:int = acc; b:int = a; c:int = b
+    acc = c + b + a
+    i = i + 1
+  }
+  printi(acc)
+  println("")
+}

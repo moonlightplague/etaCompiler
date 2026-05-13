@@ -1,0 +1,11 @@
+// testing nested array initialization
+use io
+use conv
+
+main(args: int[][]) {
+  x: int[][] = {{1,2,3},{4,5,6},{7,8,9}}
+  y: int[] = {1,2,3}
+  z: int[][] = {y,{4,5,6}}
+  println("z length: " + unparseInt(length(z)));
+  println("z[0] length: " + unparseInt(length(z[0])));
+}

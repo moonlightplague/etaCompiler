@@ -1,0 +1,44 @@
+// Expected output:
+// a=5
+// b=8
+// c=13
+// cursor = 4
+
+use io
+use conv
+
+record Cell {
+    label: int[]
+    value: int
+}
+
+record Board {
+    cells: Cell[]
+    cursor: int
+}
+
+cellText(c: Cell): int[] {
+    return c.label + "=" + unparseInt(c.value)
+}
+
+nextLive(b: Board): Cell {
+    while (b.cursor < length(b.cells)) {
+        c: Cell = b.cells[b.cursor]
+        b.cursor = b.cursor + 1
+        if (c != null) {
+            return c
+        }
+    }
+    return null
+}
+
+main(args: int[][]) {
+    board: Board = Board({Cell("a", 5), null, Cell("b", 8), Cell("c", 13)}, 0)
+    item: Cell = nextLive(board)
+    while (item != null) {
+        println(cellText(item))
+        item.value = item.value + 1
+        item = nextLive(board)
+    }
+    println("cursor = " + unparseInt(board.cursor))
+}

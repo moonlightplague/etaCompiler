@@ -1,0 +1,62 @@
+// Expected output:
+// -72
+// 180
+// 468
+// 50
+// -66
+// 560
+//
+// Calls are used as arguments to later calls, forcing early call results to
+// survive caller-saved clobbers. The wide call uses stack arguments and the
+// multi-return call exercises hidden return-buffer handling.
+use io
+use conv
+
+helper(x:int):int {
+    return x * x + 3 * x - 3
+}
+
+consume8(a:int, b:int, c:int, d:int, e:int, f:int, g:int, h:int):int {
+    return a - b + c - d + e - f + g - h
+}
+
+wide(a:int, b:int, c:int, d:int, e:int, f:int, g:int, h:int,
+     i:int, j:int, k:int, l:int): int, int, int, int {
+    s1:int = a + b + c + d
+    s2:int = e + f + g + h
+    s3:int = i + j + k + l
+    s4:int = a + l - f
+    return s1, s2, s3, s4
+}
+
+main(args:int[][]) {
+    stacky:int = consume8(
+        helper(4),
+        helper(5),
+        helper(6),
+        helper(7),
+        helper(8),
+        helper(9),
+        helper(10),
+        helper(11)
+    )
+
+    w1:int, w2:int, w3:int, w4:int = wide(
+        helper(4),
+        helper(5),
+        helper(6),
+        helper(7),
+        helper(8),
+        helper(9),
+        helper(10),
+        helper(11),
+        11, 12, 13, 14
+    )
+
+    println(unparseInt(stacky))
+    println(unparseInt(w1))
+    println(unparseInt(w2))
+    println(unparseInt(w3))
+    println(unparseInt(w4))
+    println(unparseInt(stacky + w1 + w2 + w3 + w4))
+}

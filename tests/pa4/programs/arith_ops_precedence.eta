@@ -1,0 +1,48 @@
+// arith
+// 0
+// 67
+// flag=1
+use io
+use conv
+
+gA:int = 7
+gB:int = -3
+gFlag:bool = false
+gText:int[]
+
+mix(a:int, b:int, c:int):int {
+    x:int = a + b * c
+    y:int = (a *>> b) + (c % 7)
+    z:int = (x - y) / 3
+    if a < b | b < c & !(a == c) {
+        z = z + 'A'
+    } else {
+        z = z - '\n'
+    }
+    return z
+}
+
+toggleTwice(x:bool, y:bool):bool {
+    r:bool = x & !y | (!x & y)
+    return r
+}
+
+main(args:int[][]) {
+    gText = "arith\n"
+    v1:int = mix(gA + 13, 5, 3)
+    v2:int = mix(1, 2, 9) + gB
+    b:bool = toggleTwice(true, false)
+    if b {
+        gFlag = true
+    }
+    print(gText)
+    print(unparseInt(v1))
+    print("\n")
+    print(unparseInt(v2))
+    print("\n")
+    if gFlag {
+        println("flag=1")
+    } else {
+        println("flag=0")
+    }
+}

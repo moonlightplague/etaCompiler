@@ -1,0 +1,19 @@
+// EXPECT: OK
+gcd(a:int, b:int):int {
+  while (a != 0) {
+    if a < b b = b - a
+    else a = a - b
+  }
+  return b
+}
+
+main(args:int[][]) {
+  x:int = gcd(48, 18)
+
+  s:int[] = {1, 2, 3,} 
+  t:int[] = {} 
+  u:int[] = s + t 
+  n:int = length(u)
+
+  hm:int = (4294967296 *>> 4294967296)
+}

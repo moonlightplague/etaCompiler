@@ -1,0 +1,4 @@
+use core
+
+blendColor(left: Color, right: Color): Color
+isBright(c: Color): bool

@@ -1,0 +1,25 @@
+( ((use io))
+  (
+    (
+      calculate
+      ((a int) (b int))
+      (int bool)
+      (
+        (= (sum int) (+ a b))
+        (= (is_positive bool) (> sum 0))
+        (return sum is_positive)
+      )
+    )
+    (
+      process_data
+      ()
+      ()
+      (
+        (values ([] int 5))
+        (= ([] values 0) 42)
+        (= (marker int) 'x')
+        (calculate ([] values 0) marker)
+      )
+    )
+  )
+)

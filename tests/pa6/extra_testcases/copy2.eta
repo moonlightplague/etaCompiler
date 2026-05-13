@@ -1,0 +1,16 @@
+//6
+use io
+
+main(args:int[][]) {
+  x:int = 5
+  y:int = x
+  z:int = y
+  ans:int = 0
+  if z > 0 {
+    ans = z + 1
+  } else {
+    ans = 100
+  }
+  printi(ans)
+  println("")
+}

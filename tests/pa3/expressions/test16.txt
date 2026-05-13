@@ -1,0 +1,2 @@
+//abnormal test case for array indexing
+{{{1, 2, 3}}}[0][0][0][1]

@@ -1,0 +1,10 @@
+// testing empty array length and index
+
+main(args: int[][]) {
+  x: int[] = {}
+  
+  l: int = length(x)
+
+  y: int;
+  y = x[0] // should throw error when interpreting
+}

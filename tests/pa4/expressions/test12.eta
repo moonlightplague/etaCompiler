@@ -1,0 +1,13 @@
+// testing function application expression
+use io
+use conv
+
+f(x: int): int {
+  return x
+}
+
+main(args: int[][]) {
+  x: int = 1
+  result: int = f(0)
+  println("f(0) = " + unparseInt(result));
+}

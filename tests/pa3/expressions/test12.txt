@@ -1,0 +1,2 @@
+//abnormal test case for array initializer (mismatched type)
+{1, 'c', {1, 2, 3}}

@@ -1,0 +1,111 @@
+# eth test script
+#
+# This file is a test script for eth (etac Test Harness).  It
+# conforms to the following grammar:
+#
+#   ScriptFile      ::= Commands+
+#   Command         ::= build
+#                     | CompilerTest
+#   CompilerTest    ::= TestKind (\(TestName\))? ([TestPath])? ("CmdLineArgs")?
+#                           { (FileTest;)* }
+#   TestKind        ::= etac
+#   TestName        ::= LitString
+#   FileTest        ::= Filenames Description? FailureSet?
+#   Filenames       ::= Filename+
+#   Description     ::= LitString
+#   FailureSet      ::= Failure (, Failure)*
+#   Failure         ::= \( ErrorKind \)
+#                     | \( ErrorKind, LitString \)
+#
+#   TestPath        :   the path to the test files, enclosed in quotes,
+#                       relative to the path given in eth's -testpath flag.
+#   CmdLineArgs     :   command-line arguments for etac
+#   Filename        :   the name of a file, interpreted from TestPath.
+#   LitString       :   a literal string, enclosed in quotes.
+#   ErrorKind       :   one of, or a unique prefix of one of the following
+#                       strings: "Lexical Error", "Syntax Error", or
+#                       "Semantic Error".
+#
+# eth runs the commands in order of appearance.
+
+# build compiler first
+build
+
+etac ("Test --help") "--help" {
+    ;
+}
+
+etac ("Test statements --typecheck") ["statements"] "--typecheck" {
+    test1.eta;
+    test2.eta;
+    test3.eta;
+    test4.eta;
+    test5.eta (Semantic, "guard of if statement does not have type bool");
+    test6.eta;
+    test7.eta (Semantic, "guard of while statement does not have type bool");
+    test8.eta (Semantic, "number of return values supplied does not match function signature");
+    test9.eta;
+    test10.eta;
+    test11.eta (Semantic, "type of lvalue and rvalue does not match");
+    test12.eta;
+    test13.eta (Semantic, "type of lvalue and rvalue does not match");
+    test14.eta (Semantic, "Unexpected type for binary operation []: int[], bool");
+    test15.eta;
+    test16.eta (Semantic, "type of lvalue and rvalue does not match");
+    test17.eta;
+    test18.eta;
+    test19.eta (Semantic, "number of lvalues does not match the number of rvalues");
+    test20.eta (Semantic, "number of return values supplied does not match function signature");
+}
+
+etac ("Test programs --typecheck") ["programs"] "--typecheck" {
+    test1.eta;
+    test2.eta;
+    test3.eta;
+    test4.eta (Semantic, "method gcd does not exist");
+    test5.eta;
+    test6.eta;
+    test7.eta;
+    test8.eta;
+    test9.eta;
+    test10.eta;
+    test11.eta;
+    test12.eta;
+    test13.eta;
+    test14.eta (Semantic, "redeclared variable");
+    test15.eta (Semantic, "Attempting to assign variable x before declaration");
+    test16.eta (Semantic, "function f is not a procedure");
+    test17.eta (Syntax, "mismatched input 'y' expecting {';', '}'}");
+    test18.eta (Semantic, "function f missing return statement");
+    test19.eta (Semantic, "cannot unpack -- return type of function and lvalue type doesn't match");
+    test20.eta (Semantic, "cannot unpack -- return type of function call does not match the number of rvalues");
+    test21.eta (Syntax, "no viable alternative at input 'err2:int[][3'");
+    test22.eta (Syntax, "mismatched input '+' expecting {<EOF>, ';', ID}");
+    test23.eta;
+    test24.eta (Semantic, "parameter x shadows an existing variable/function");
+    test25.eta;
+    test26.eta (Semantic, "parameter x shadows an existing variable/function");
+    test27.eta;
+    test28.eta (Syntax, "mismatched input ')' expecting {'length', 'true', 'false', '(', '{', '-', '!', INTEGER, STRING, CHARACTER, ID}");
+    test29.eta;
+}
+
+etac ("Test a big program that has interfaces --typecheck") ["programs-with-interfaces/big"] "-libpath $(testpath) --typecheck" {
+    main.eta;
+}
+
+etac ("Test a program that has interfaces with conflicting function signatures --typecheck") ["programs-with-interfaces/mismatched-functions"] "-libpath $(testpath) --typecheck" {
+    main.eta (Semantic, "E has a function h with a mismatched signature");
+}
+
+etac ("Test a program that has duplicated interfaces --typecheck") ["programs-with-interfaces/duplicated-use"] "-libpath $(testpath) --typecheck" {
+    main.eta;
+}
+
+etac ("Test a program that has interfaces with matching function signatures --typecheck") ["programs-with-interfaces/matching-functions"] "-libpath $(testpath) --typecheck" {
+    main.eta;
+}
+
+etac ("Test a program that has interfaces and shadowing --typecheck") ["programs-with-interfaces/shadowing"] "-libpath $(testpath) --typecheck" {
+    main.eta (Semantic, "parameter x shadows an existing variable/function");
+}

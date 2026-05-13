@@ -1,0 +1,25 @@
+( ((use io) (use convention))
+  (
+    (:global limit int 100)
+    (:global flag bool true)
+    (
+      main
+      ((args ([] ([] int))))
+      ()
+      (
+        (= (current int) 50)
+        (= (flag bool) true)
+        (if (< current limit)
+          (
+            (print "Within limits")
+            (= current (+ current 10))
+          )
+          (
+            (= flag false)
+          )
+        )
+        (return)
+      )
+    )
+  )
+)

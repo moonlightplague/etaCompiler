@@ -1,0 +1,68 @@
+use app
+
+record Summary {
+    origin: Point
+    marker: Glyph
+    scores: int[]
+    current: Node
+}
+
+summarize(scene: Scene, marker: Glyph, fallback: Point, seed: int): Summary {
+    scores: int[] = {seed, pointX(fallback), pointY(scene.root.anchor)}
+    head: Node = makeNode(seed, null)
+
+    if (scene.nodes != null) {
+        head.next = scene.nodes
+    }
+
+    return Summary(fallback, marker, scores, head)
+}
+
+summaryValue(summary: Summary): int {
+    total, i: int
+    while (i < length(summary.scores)) {
+        total = total + summary.scores[i]
+        if (total > 1000) {
+            break
+        }
+        i = i + 1
+    }
+
+    if (summary.current != null) {
+        total = total + summary.current.value
+    }
+
+    return total
+}
+
+main(args: int[][]) {
+    origin, shifted: Point
+    red, blue, mixed: Color
+    glyph, moved: Glyph
+    head, tail: Node
+    scratch: int[]
+
+    origin = makePoint(3, 4)
+    shifted = translatePoint(origin, 8, 13)
+    red = makeColor(255, 0, 0)
+    blue = makeColor(0, 0, 255)
+    mixed = blendColor(red, blue)
+    glyph = makeGlyph(origin, mixed)
+    moved = moveGlyph(glyph, pointX(shifted), pointY(shifted))
+
+    head = makeNode(10, null)
+    tail = appendNode(head, 20)
+    tail.next = makeNode(30, null)
+
+    scene: Scene = makeScene(moved, head)
+    summary: Summary = summarize(scene, glyph, shifted, sumNodes(head))
+
+    if (summary.marker == glyph & scratch == null) {
+        summary.current = tail
+    }
+
+    _, visible: bool = summaryValue(summary), isBright(summary.marker.tint)
+    if (visible) {
+        summary.scores[0] = publish(makeLayout(scene, summary.origin), retintGlyph(summary.marker, red))
+    }
+}

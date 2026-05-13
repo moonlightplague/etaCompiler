@@ -1,0 +1,46 @@
+// Expected output:
+// trace defaults to null
+// walker score = 48
+// walker moved = 1,2
+
+use io
+use conv
+
+record Pair {
+    row, col: int
+}
+
+record Walker {
+    pos: Pair
+    seen: int[]
+}
+
+move(w: Walker, dr: int, dc: int) {
+    w.pos.row = w.pos.row + dr
+    w.pos.col = w.pos.col + dc
+}
+
+score(w: Walker): int {
+    total, i: int
+    while (i < length(w.seen)) {
+        total = total + w.seen[i]
+        if (total > 20) {
+            break
+        }
+        i = i + 1
+    }
+    return total + w.pos.row * 10 + w.pos.col
+}
+
+main(args: int[][]) {
+    trace: int[]
+    if (trace == null) {
+        println("trace defaults to null")
+    }
+
+    w: Walker = Walker(Pair(0, 0), {3, 1, 4, 1, 5, 9, 2})
+    move(w, 2, 5)
+    println("walker score = " + unparseInt(score(w)))
+    move(w, -1, -3)
+    println("walker moved = " + unparseInt(w.pos.row) + "," + unparseInt(w.pos.col))
+}

@@ -1,0 +1,6 @@
+// EXPECT: FAIL (function body must have type void ⇒ all paths must return)
+f(x:int):int {
+  if x > 0 { return x }
+}
+
+main(args:int[][]) { }

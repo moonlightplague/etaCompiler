@@ -1,0 +1,29 @@
+use io 
+use conv 
+
+weird (a1:int, a2:int, 
+      a3:int, a4:int, 
+      a5:bool, a6:bool, 
+      a7:int, a8:int) :
+       int, int, bool, bool
+{
+  return a1 + a2, a3 - a4, a5 & a6, a7 <= a8
+}
+
+main(arg: int[][]) {
+  r1 : int, r2 : int, r3 : bool, r4 : bool = weird (1, 2, 3, 4, true, false, 7, 8); 
+  println(unparseInt(r1))
+  println(unparseInt(r2))
+  if r3 {
+    println(unparseInt(1))
+  }
+  else {
+    println(unparseInt(0))
+  }
+  if r4 {
+    println(unparseInt(1))
+  }
+  else {
+    println(unparseInt(0))
+  }
+}

@@ -1,0 +1,2 @@
+// Testing to ensure that longer operators have precedence over shorter ones in lexing
+s: int = 1 *>> 2 == 3 <= "Hello World!"

@@ -1,0 +1,15 @@
+// testing single assignment statements
+use io
+
+main(args: int[][]) {
+  _ = 5
+
+  x: int
+  x = 5
+
+  y: int = 5
+
+  z: int[] = "123"
+  z[0] = 33
+  println(z)
+}

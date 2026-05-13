@@ -1,0 +1,49 @@
+//alias-ok
+//copy-distinct
+//Hi?!
+//
+//0
+//5
+
+use io
+use conv
+
+sameAlias(a:int[], b:int[]):bool {
+    return a == b
+}
+
+sameContentsButNewArray(a:int[]):int[] {
+    empty:int[] = {}
+    copy:int[] = empty + a
+    return copy
+}
+
+main(args:int[][]) {
+    empty:int[] = {}
+    one:int[] = {63,}
+    hello:int[] = "Hi"
+    tail:int[] = {33, 10}
+
+    msg:int[] = hello + one + tail + empty
+    alias:int[] = msg
+    copy:int[] = sameContentsButNewArray(msg)
+
+    if sameAlias(msg, alias) & !(msg != alias) {
+        print("alias-ok\n")
+    } else {
+        print("alias-bad\n")
+    }
+
+    if msg != copy {
+        print("copy-distinct\n")
+    } else {
+        print("copy-alias\n")
+    }
+
+    print(msg)
+    print("\n")
+    print(unparseInt(length(empty)))
+    print("\n")
+    print(unparseInt(length(copy)))
+    print("\n")
+}

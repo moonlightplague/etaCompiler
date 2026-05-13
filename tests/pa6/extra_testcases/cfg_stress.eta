@@ -1,0 +1,193 @@
+use io
+
+// This function intentionally contains many copy chains.
+// Copy propagation should turn many uses of copied variables back into uses of x.
+// Then dead-code elimination should remove the useless copy assignments.
+copy_chain_value(x:int):int {
+    a0:int = x
+    a1:int = a0
+    a2:int = a1
+    a3:int = a2
+    a4:int = a3
+    a5:int = a4
+    a6:int = a5
+    a7:int = a6
+    a8:int = a7
+    a9:int = a8
+
+    // After copy propagation:
+    // result = x + x + x
+    // Then a0..a9 are dead.
+    result:int = a9 + a5 + a2
+
+    // Pure dead arithmetic.
+    d0:int = result * 13
+    d1:int = d0 + 777
+    d2:int = d1 * d1
+    d3:int = d2 - d0
+    d4:int = d3 / 3
+    d5:int = d4 % 97
+
+    d0 = 1
+    d1 = 2
+    d2 = 3
+    d3 = 4
+    d4 = 5
+    d5 = 6
+
+    return result
+}
+
+// This loop is the main runtime stress test.
+// The live computation is simple:
+//
+//   acc += 3*i + 1
+//
+// But the source code hides this behind long copy chains and dead code.
+// Copy propagation should collapse the chains.
+// DCE should then remove the copy assignments and dead arithmetic.
+hot_loop(n:int):int {
+    i:int = 0
+    acc:int = 0
+
+    while i < n {
+        // Copy chain based on i.
+        c0:int = i
+        c1:int = c0
+        c2:int = c1
+        c3:int = c2
+        c4:int = c3
+        c5:int = c4
+        c6:int = c5
+        c7:int = c6
+        c8:int = c7
+        c9:int = c8
+        c10:int = c9
+        c11:int = c10
+        c12:int = c11
+        c13:int = c12
+        c14:int = c13
+        c15:int = c14
+
+        // Another copy chain based on acc.
+        s0:int = acc
+        s1:int = s0
+        s2:int = s1
+        s3:int = s2
+        s4:int = s3
+        s5:int = s4
+
+        // Live update.
+        // After copy propagation:
+        // acc = acc + i + i + i + 1
+        acc = s5 + c15 + c9 + c3 + 1
+
+        // Lots of loop-body dead code.
+        // This should be removed by DCE.
+        dead0:int = c15 * 17
+        dead1:int = dead0 + s5
+        dead2:int = dead1 * dead1
+        dead3:int = dead2 - dead0
+        dead4:int = dead3 / 5
+        dead5:int = dead4 % 12345
+        dead6:int = dead5 + dead4
+        dead7:int = dead6 * 3
+        dead8:int = dead7 - dead1
+        dead9:int = dead8 + 999
+
+        // Repeated overwrites before any use.
+        dead0 = 11
+        dead0 = 22
+        dead0 = 33
+        dead1 = 44
+        dead1 = 55
+        dead1 = 66
+        dead2 = 77
+        dead2 = 88
+        dead2 = 99
+
+        // Dead boolean/copy chain.
+        b0:bool = i < n
+        b1:bool = b0
+        b2:bool = b1
+        b3:bool = b2
+        b4:bool = b3
+
+        if b4 {
+            // This assignment is dead because marker is never used.
+            marker:int = c15
+            marker = marker + 1
+            marker = marker * 2
+        }
+
+        i = i + 1
+    }
+
+    return acc
+}
+
+// Same idea, but with arrays.
+// Be conservative: array writes may be treated as side-effecting.
+// However, scalar copy chains around array reads should still be optimized.
+array_copy_test(n:int):int {
+    arr:int[4]
+    arr[0] = 1
+    arr[1] = 2
+    arr[2] = 3
+    arr[3] = 4
+
+    i:int = 0
+    total:int = 0
+
+    while i < n {
+        x0:int = arr[0]
+        x1:int = x0
+        x2:int = x1
+        x3:int = x2
+        x4:int = x3
+
+        y0:int = arr[1]
+        y1:int = y0
+        y2:int = y1
+        y3:int = y2
+        y4:int = y3
+
+        // Live value is always 1 + 2 = 3 per iteration.
+        total = total + x4 + y4
+
+        // Dead scalar work using array values.
+        z0:int = arr[2]
+        z1:int = z0
+        z2:int = z1 * arr[3]
+        z3:int = z2 + 100
+        z4:int = z3 * z3
+        z5:int = z4 - z2
+
+        z0 = 0
+        z1 = 0
+        z2 = 0
+        z3 = 0
+        z4 = 0
+        z5 = 0
+
+        i = i + 1
+    }
+
+    return total
+}
+
+main(args:int[][]) {
+    println("copy propagation + DCE stress test start")
+
+    n:int = 100000000
+
+    a:int = hot_loop(n)
+    b:int = array_copy_test(n)
+    c:int = copy_chain_value(7)
+
+    result:int = a + b + c
+    printi(result)
+    println("")
+
+    println("copy propagation + DCE stress test end")
+}

@@ -1,0 +1,8 @@
+// abnormal test case: if
+main(args: int[][]) {
+  x: int = 1
+  y: bool
+  y = true
+
+  if (x) x = x + 1 else x = x - 1
+}

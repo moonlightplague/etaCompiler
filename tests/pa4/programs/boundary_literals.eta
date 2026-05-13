@@ -1,0 +1,37 @@
+//-9223372036854775808
+//9223372036854775807
+//92
+//10
+//65
+//A
+//B!
+//A
+//\
+use io
+use conv
+
+main(args:int[][]) {
+    minv:int = -9223372036854775808
+    maxv:int = 9223372036854775807
+    slash:int = '\\'
+    nl:int = '\n'
+    hexA:int = '\x{41}'
+
+    s:int[] = "A\nB\x{21}"
+    t:int[] = {hexA, nl, slash}
+
+    print(unparseInt(minv))
+    print("\n")
+    print(unparseInt(maxv))
+    print("\n")
+    print(unparseInt(slash))
+    print("\n")
+    print(unparseInt(nl))
+    print("\n")
+    print(unparseInt(hexA))
+    print("\n")
+    print(s)
+    print("\n")
+    print(t)
+    print("\n")
+}

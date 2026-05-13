@@ -1,0 +1,20 @@
+// testing multi assignment statements
+use io
+
+f4(): int[], int[], int[], int[] {
+  s1: int[] = "first "
+  s2: int[] = "second "
+  s3: int[] = "third "
+  s4: int[] = "fourth "
+  return s1, s2, s3, s4
+}
+
+main(args: int[][]) {
+  second: int[]
+  fourth: int[][] = {{}, "!"}
+  _, second, third: int[], fourth[0] = f4()
+  println(second + third + fourth[0] + fourth[1])
+
+  _, second, x: int[], fourth[0] = "ignored", "start ", "middle ", "end"
+  println(second + x + fourth[0] + fourth[1])
+}

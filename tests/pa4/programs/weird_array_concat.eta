@@ -1,0 +1,13 @@
+//0
+//0
+//1
+use io
+use conv
+
+main(args:int[][]) {
+    print(unparseInt(length(({{{{}}}} + {{}})[0][0][0])))
+    println("")
+    print(unparseInt(length(({{{{}}}} + {{}})[1])))
+    println("")
+    print(unparseInt(length(({{{{}}}} + {{}})[0][0])))
+}

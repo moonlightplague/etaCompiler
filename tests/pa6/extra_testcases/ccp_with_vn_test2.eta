@@ -1,0 +1,123 @@
+//CCP int64 overflow test
+//Expected result:
+//11111111
+//Actual result:
+//11111111
+//Some folded constants:
+//-9223372036854775808
+//9223372036854775807
+//-2
+//1
+//0
+//-9223372036854775808
+
+use io
+
+main(args:int[][]) {
+    max:int = 9223372036854775807
+
+    // Avoid writing -9223372036854775808 directly if your lexer parses
+    // negative literals as unary minus applied to a positive literal.
+    // This computes INT64_MIN by wraparound:
+    min:int = max + 1
+
+    minus_one:int = 0 - 1
+
+    // Basic overflow constants.
+    wrap_add:int = max + 1              // INT64_MIN
+    wrap_sub:int = min - 1              // INT64_MAX
+    wrap_mul1:int = max * 2             // -2
+    wrap_mul2:int = max * max           // 1
+    wrap_mul3:int = min * 2             // 0
+    wrap_neg:int = 0 - min              // INT64_MIN, because -INT64_MIN wraps to itself
+
+    result:int = 0
+
+    // Test 1: max + 1 wraps to min.
+    if wrap_add == min {
+        result = result + 1
+    } else {
+        bad:int = 1 / 0
+        result = result + bad
+    }
+
+    // Test 2: min - 1 wraps to max.
+    if wrap_sub == max {
+        result = result + 10
+    } else {
+        bad:int = 1 / 0
+        result = result + bad
+    }
+
+    // Test 3: max * 2 wraps to -2.
+    if wrap_mul1 == 0 - 2 {
+        result = result + 100
+    } else {
+        bad:int = 1 / 0
+        result = result + bad
+    }
+
+    // Test 4: max * max wraps to 1.
+    if wrap_mul2 == 1 {
+        result = result + 1000
+    } else {
+        bad:int = 1 / 0
+        result = result + bad
+    }
+
+    // Test 5: min * 2 wraps to 0.
+    if wrap_mul3 == 0 {
+        result = result + 10000
+    } else {
+        bad:int = 1 / 0
+        result = result + bad
+    }
+
+    // Test 6: -INT64_MIN is still INT64_MIN under two's-complement wraparound.
+    if wrap_neg == min {
+        result = result + 100000
+    } else {
+        bad:int = 1 / 0
+        result = result + bad
+    }
+
+    // Test 7: comparison after overflow.
+    // max + 1 is min, so it should be smaller than 0.
+    if wrap_add < 0 {
+        result = result + 1000000
+    } else {
+        bad:int = 1 / 0
+        result = result + bad
+    }
+
+    // Test 8: another branch that should be unreachable.
+    if max < min {
+        bad:int = 1 / 0
+        result = result + bad
+    } else {
+        result = result + 10000000
+    }
+
+    println("CCP int64 overflow test")
+    println("Expected result:")
+    printi(11111111)
+    println("")
+
+    println("Actual result:")
+    printi(result)
+    println("")
+
+    println("Some folded constants:")
+    printi(wrap_add)   // expected: -9223372036854775808
+    println("")
+    printi(wrap_sub)   // expected: 9223372036854775807
+    println("")
+    printi(wrap_mul1)  // expected: -2
+    println("")
+    printi(wrap_mul2)  // expected: 1
+    println("")
+    printi(wrap_mul3)  // expected: 0
+    println("")
+    printi(wrap_neg)   // expected: -9223372036854775808
+    println("")
+}

@@ -1,0 +1,16 @@
+use io
+use conv
+
+g : int = 3
+
+increment_g() : int {
+   g = g + 1
+   return g
+}
+
+main(args:int[][]){
+    a : int[increment_g()][increment_g()]
+    print(unparseInt(length(a)))
+    println("")
+    print(unparseInt(length(a[0])))
+}

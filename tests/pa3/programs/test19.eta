@@ -1,0 +1,8 @@
+// EXPECT: FAIL (second return is bool, not int)
+pair(x:int):int, bool {
+  return x, x == 0
+}
+
+main(args:int[][]) {
+  a:int, b:int = pair(1)
+}

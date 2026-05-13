@@ -1,0 +1,9 @@
+// testing string concatenation
+use io
+
+main(args: int[][]) {
+  x: int[] = "hello"
+  y: int[] = " world!"
+  z: int[] = x + y
+  println(z);
+}

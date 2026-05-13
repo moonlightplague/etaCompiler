@@ -1,0 +1,7 @@
+// EXPECT: FAIL, E and F have mismatched signatures for h()
+use F
+use E
+
+main(args:int[][]) {
+  a:int = h(0)
+}

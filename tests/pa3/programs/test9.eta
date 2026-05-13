@@ -1,0 +1,16 @@
+// EXPECT: OK
+divmod(x:int, y:int):int, int {
+  q:int = x / y
+  r:int = x % y
+  return q, r
+}
+
+main(args:int[][]) {
+  q:int, r:int = divmod(10, 3)
+
+
+  q, r = r, q
+
+  _, rem:int = divmod(7, 2)
+  _, _ = divmod(99, 10)
+}

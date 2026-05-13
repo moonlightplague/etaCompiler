@@ -1,0 +1,27 @@
+use io
+use conv
+
+// 10 arguments, 4 return values.
+mega_compute(a:int, b:int, c:int, d:int, e:int, f:int, g:int, h:int, i:int, j:int): int, int, int, int {
+    sum1:int = a + b + c + d + e
+    sum2:int = f + g + h + i + j
+    prod1:int = a * c * e
+    prod2:int = b * d * f * h * j
+    return sum1, sum2, prod1, prod2
+}
+
+main(args: int[][]) {
+    // Live variables to force register pressure and test callee-saved preservation
+    x1:int = 100
+    x2:int = 200
+
+    r1:int, r2:int, r3:int, r4:int = mega_compute(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    println(unparseInt(r1)); // Expected: 15
+    println(unparseInt(r2)); // Expected: 40
+    println(unparseInt(r3)); // Expected: 15
+    println(unparseInt(r4)); // Expected: 3840
+
+    // Ensure local state survived the complex call 
+    println(unparseInt(x1 + x2)); // Expected: 300
+}

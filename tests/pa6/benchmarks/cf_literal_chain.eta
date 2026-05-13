@@ -1,0 +1,15 @@
+// The loop repeatedly uses large literal-only expression trees.
+use io
+
+main(args:int[][]) {
+  i:int = 0
+  live:int = 0
+  while i < 160000000 {
+    live = live + (12345 * 67 - 8901 / 3 + 456 % 11) + i
+    live = live + (777 * 888 - 999 / 9 + 321 % 13)
+    live = live - (4444 / 4 - 333 * 2 + 222 % 5)
+    i = i + 1
+  }
+  printi(live)
+  println("")
+}

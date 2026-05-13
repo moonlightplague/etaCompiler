@@ -1,0 +1,140 @@
+# eth test script
+#
+# This file is a test script for eth (etac Test Harness).  It
+# conforms to the following grammar:
+#
+#   ScriptFile      ::= Commands+
+#   Command         ::= build
+#                     | CompilerTest
+#   CompilerTest    ::= TestKind (\(TestName\))? ([TestPath])? ("CmdLineArgs")?
+#                           { (FileTest;)* }
+#   TestKind        ::= etac
+#   TestName        ::= LitString
+#   FileTest        ::= Filenames Description? FailureSet?
+#   Filenames       ::= Filename+
+#   Description     ::= LitString
+#   FailureSet      ::= Failure (, Failure)*
+#   Failure         ::= \( ErrorKind \)
+#                     | \( ErrorKind, LitString \)
+#
+#   TestPath        :   the path to the test files, enclosed in quotes,
+#                       relative to the path given in eth's -testpath flag.
+#   CmdLineArgs     :   command-line arguments for etac
+#   Filename        :   the name of a file, interpreted from TestPath.
+#   LitString       :   a literal string, enclosed in quotes.
+#   ErrorKind       :   one of, or a unique prefix of one of the following
+#                       strings: "Lexical Error", "Syntax Error", or
+#                       "Semantic Error".
+#
+# eth runs the commands in order of appearance.
+
+# build compiler first
+build
+
+etac ("Test --help") "--help" {
+    ;
+}
+
+etac ("Test expressions --irgen") ["expressions"] "-libpath $(testpath) --irgen" {
+    test1.eta;
+    test2.eta;
+    test3.eta;
+    test4.eta;
+    test5.eta;
+    test6.eta;
+    test7.eta;
+    test8.eta;
+    test9.eta;
+    test10.eta;
+    test11.eta;
+    test12.eta;
+    test13.eta;
+    test14.eta;
+    test15.eta;
+    test16.eta;
+    test17.eta;
+    test18.eta;
+    test19.eta;
+}
+
+etac ("Test expressions --irgen -O") ["expressions"] "-libpath $(testpath) --irgen -O" {
+    test1.eta;
+    test2.eta;
+    test3.eta;
+    test4.eta;
+    test5.eta;
+    test6.eta;
+    test7.eta;
+    test8.eta;
+    test9.eta;
+    test10.eta;
+    test11.eta;
+    test12.eta;
+    test13.eta;
+    test14.eta;
+    test15.eta;
+    test16.eta;
+    test17.eta;
+    test18.eta;
+    test19.eta;
+}
+
+etac ("Test statements --irgen") ["statements"] "-libpath $(testpath) --irgen" {
+    test1.eta;
+    test2.eta;
+    test3.eta;
+    test4.eta;
+    test5.eta;
+    test6.eta;
+    test7.eta;
+}
+
+etac ("Test statements --irgen -O") ["statements"] "-libpath $(testpath) --irgen -O" {
+    test1.eta;
+    test2.eta;
+    test3.eta;
+    test4.eta;
+    test5.eta;
+    test6.eta;
+    test7.eta;
+}
+
+etac ("Test programs --irgen") ["programs"] "-libpath $(testpath) --irgen" {
+    ack.eta;
+    arith_ops_precedence.eta;
+    array_aliasing.eta;
+    array_alloc_weird.eta;
+    boundary_literals.eta;
+    concat_alias_strings.eta;
+    escape_test.eta;
+    globals_mutual_recursion.eta;
+    kmp.eta;
+    linkedlist.eta;
+    long_stress_all.eta;
+    multi_assignment.eta;
+    multi_return_lvalues.eta;
+    primes.eta;
+    short_circuit_effects.eta;
+    sized_arrays_ragged.eta;
+    weird_array_concat.eta;
+}
+
+etac ("Test programs --irgen -O") ["programs"] "-libpath $(testpath) --irgen -O" {
+    ack.eta;
+    arith_ops_precedence.eta;
+    array_aliasing.eta;
+    array_alloc_weird.eta;
+    boundary_literals.eta;
+    concat_alias_strings.eta;
+    escape_test.eta;
+    globals_mutual_recursion.eta;
+    kmp.eta;
+    linkedlist.eta;
+    long_stress_all.eta;
+    multi_assignment.eta;
+    multi_return_lvalues.eta;
+    primes.eta;
+    short_circuit_effects.eta;
+    sized_arrays_ragged.eta;
+    weird_array_concat.eta;
+}

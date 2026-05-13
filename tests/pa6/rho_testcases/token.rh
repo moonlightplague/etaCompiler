@@ -1,0 +1,11 @@
+record Token {
+    value: int
+}
+
+Token(value: int): int {
+    return value
+}
+
+main(args: int[][]) {
+    token: Token = Token(1)
+}

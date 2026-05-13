@@ -1,0 +1,7 @@
+// EXPECT: FAIL (return must be last statement in its immediately enclosing block)
+f(x:int):int {
+  return x
+  y:int = 0
+}
+
+main(args:int[][]) { }

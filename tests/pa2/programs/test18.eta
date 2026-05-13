@@ -1,0 +1,6 @@
+use io
+use conv
+
+main():int{
+    a:int[n][m][][][][]
+}

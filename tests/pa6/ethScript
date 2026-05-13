@@ -1,0 +1,150 @@
+# eth test script
+#
+# This file is a test script for eth (etac Test Harness).  It
+# conforms to the following grammar:
+#
+#   ScriptFile      ::= Commands+
+#   Command         ::= build
+#                     | CompilerTest
+#   CompilerTest    ::= TestKind (\(TestName\))? ([TestPath])? ("CmdLineArgs")?
+#                           { (FileTest;)* }
+#   TestKind        ::= etac
+#   TestName        ::= LitString
+#   FileTest        ::= Filenames Description? FailureSet?
+#   Filenames       ::= Filename+
+#   Description     ::= LitString
+#   FailureSet      ::= Failure (, Failure)*
+#   Failure         ::= \( ErrorKind \)
+#                     | \( ErrorKind, LitString \)
+#
+#   TestPath        :   the path to the test files, enclosed in quotes,
+#                       relative to the path given in eth's -testpath flag.
+#   CmdLineArgs     :   command-line arguments for etac
+#   Filename        :   the name of a file, interpreted from TestPath.
+#   LitString       :   a literal string, enclosed in quotes.
+#   ErrorKind       :   one of, or a unique prefix of one of the following
+#                       strings: "Lexical Error", "Syntax Error", or
+#                       "Semantic Error".
+#
+# eth runs the commands in order of appearance.
+
+# build compiler first
+build
+
+etac ("Test --help") "--help" {
+    ;
+}
+
+etac ("Test --report-opts") "--report-opts" {
+    ;
+}
+
+etac ("Benchmark test cases: Test -target linux") ["benchmarks"] "-libpath $(testpath) -target linux" {
+    cf_array_expr.eta;
+    cf_branch_hot.eta;
+    cf_literal_chain.eta;
+    copy_array_index.eta;
+    copy_branch_join.eta;
+    copy_call_args.eta;
+    copy_chain_hot.eta;
+    cp_arith_hot.eta;
+    cp_branch_hot.eta;
+    cp_stride_index.eta;
+    dce_branch_noise.eta;
+    dce_chain_hot.eta;
+    dce_nested_noise.eta;
+    reg_call_survivors.eta;
+    reg_coalesce_chain.eta;
+    reg_ring_pressure.eta;
+    vn_arith_hot.eta;
+    vn_commute_hot.eta;
+    vn_tree_hot.eta;
+}
+
+etac ("Benchmark test cases: Test -target linux -O") ["benchmarks"] "-libpath $(testpath) -target linux -O" {
+    cf_array_expr.eta;
+    cf_branch_hot.eta;
+    cf_literal_chain.eta;
+    copy_array_index.eta;
+    copy_branch_join.eta;
+    copy_call_args.eta;
+    copy_chain_hot.eta;
+    cp_arith_hot.eta;
+    cp_branch_hot.eta;
+    cp_stride_index.eta;
+    dce_branch_noise.eta;
+    dce_chain_hot.eta;
+    dce_nested_noise.eta;
+    reg_call_survivors.eta;
+    reg_coalesce_chain.eta;
+    reg_ring_pressure.eta;
+    vn_arith_hot.eta;
+    vn_commute_hot.eta;
+    vn_tree_hot.eta;
+}
+
+etac ("Test -target linux") ["extra_testcases"] "-libpath $(testpath) -target linux" {
+    ccp_with_vn_test1.eta;
+    ccp_with_vn_test2.eta;
+    ccp_with_vn_test3.eta;
+    cfg_stress.eta;
+    copy1.eta;
+    copy2.eta;
+    copy3.eta;
+    cp1.eta;
+    cp2.eta;
+    cp3.eta;
+    dce.eta;
+    dce1.eta;
+    dce2.eta;
+    dce3.eta;
+    reg_array_stride.eta;
+    sort.eta;
+    vn1.eta;
+    vn2.eta;
+    vn3.eta;
+}
+
+etac ("Test") ["regalloc"] "-libpath $(testpath) -target linux" {
+    array_alias_loop_pressure.eta;
+    coalesce_freeze_pressure.eta;
+    recursion_short_circuit_pressure.eta;
+    wide_call_multireturn_pressure.eta;
+}
+
+etac ("Test typecheck rho") ["rho_testcases"] "-libpath $(testpath) --typecheck" {
+    cell.rh (Semantic, "type of lvalue and rvalue does not match");
+    duplicate.rh (Semantic, "Re-declaration of field value for the record type Duplicate");
+    same.rh (Semantic, "Incompatible types used in equality/inequality operator.");
+    test2.rh (Semantic, "a statement that is not the last statement in its block has void type");
+    test3.rh (Semantic, "Dangling break statement");
+    token.rh (Semantic, "Token already declared");
+}
+
+etac ("Test") ["rho_testcases"] "-libpath $(testpath) -target linux" {
+    linkedlist.rh;
+    list_break.rh;
+    loop.rh;
+    matrix_walk.rh;
+    nested_records.rh;
+    point.rh;
+    record_array.rh;
+    stress_world.rh;
+    test.rh;
+}
+
+etac ("Rho Box Test") ["rho_testcases/box"] "-libpath $(testpath) --typecheck" {
+    main.rh (Semantic, "method Box does not exist");
+}
+
+etac ("Rho Geometry Test") ["rho_testcases/geometry"] "-libpath $(testpath) --typecheck" {
+    main.rh;
+}
+
+etac ("Rho Point Test") ["rho_testcases/point"] "-libpath $(testpath) -target linux" {
+    point.rh;
+}
+
+etac ("Rho Secret Test") ["rho_testcases/secret"] "-libpath $(testpath) --typecheck" {
+    main.rh (Semantic, "invalid field hidden for record type Secret");
+}

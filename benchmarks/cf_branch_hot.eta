@@ -1,0 +1,17 @@
+// Constant folding should turn the branch condition into a direct jump.
+use io
+
+main(args:int[][]) {
+  i:int = 0
+  live:int = 5
+  while i < 160000000 {
+    if (14 * 3 - 7 == 35) & (99 / 3 + 2 > 30) {
+      live = live + (123 * 45 - 678 / 3 + 19 % 5) + i
+    } else {
+      live = live + (987 * 65 - 432 / 6 + 17 % 3) - i
+    }
+    i = i + 1
+  }
+  printi(live)
+  println("")
+}

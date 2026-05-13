@@ -1,0 +1,53 @@
+// Expected output:
+// lo = 2,3
+// hi = 8,9
+// square area = 36
+
+use io
+use conv
+
+record Point {
+    x, y: int
+}
+
+record Rect {
+    lo: Point
+    hi: Point
+}
+
+record Stats {
+    area: int
+    square: bool
+}
+
+normalize(r: Rect) {
+    if (r.lo.x > r.hi.x) {
+        t: int = r.lo.x
+        r.lo.x = r.hi.x
+        r.hi.x = t
+    }
+    if (r.lo.y > r.hi.y) {
+        t: int = r.lo.y
+        r.lo.y = r.hi.y
+        r.hi.y = t
+    }
+}
+
+measure(r: Rect): Stats {
+    w: int = r.hi.x - r.lo.x
+    h: int = r.hi.y - r.lo.y
+    return Stats(w * h, w == h)
+}
+
+main(args: int[][]) {
+    r: Rect = Rect(Point(8, 9), Point(2, 3))
+    normalize(r)
+    s: Stats = measure(r)
+    println("lo = " + unparseInt(r.lo.x) + "," + unparseInt(r.lo.y))
+    println("hi = " + unparseInt(r.hi.x) + "," + unparseInt(r.hi.y))
+    if (s.square) {
+        println("square area = " + unparseInt(s.area))
+    } else {
+        println("rect area = " + unparseInt(s.area))
+    }
+}

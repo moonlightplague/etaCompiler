@@ -1,0 +1,4 @@
+//this should compile
+foo() : int {
+    {a:int = 3}
+}

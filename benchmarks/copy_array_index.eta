@@ -1,0 +1,18 @@
+// Alias chains feed a hot array index and value.
+use io
+
+main(args:int[][]) {
+  a:int[8]
+  i:int = 0
+  sum:int = 0
+  while i < 70000000 {
+    base:int = i % 8
+    p:int = base; q:int = p; r:int = q; s:int = r
+    a[s] = sum + r
+    u:int = s; v:int = u; w:int = v
+    sum = sum + a[w] + base
+    i = i + 1
+  }
+  printi(sum)
+  println("")
+}

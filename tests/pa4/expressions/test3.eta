@@ -1,0 +1,11 @@
+// test equality and unequality
+use io
+
+main(args: int[][]) {
+  x: bool = true
+  y: bool = false
+  x_y_same: bool = x == y;
+  x_y_different: bool = x != y;
+  if (x_y_same) println("x_y_same is true")
+  if (x_y_different) println("x_y_different is true")
+}

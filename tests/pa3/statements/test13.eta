@@ -1,0 +1,5 @@
+// abnormal test case: array assign
+main(args: int[][]) {
+  arr: int[] = {1,2,3}
+  arr[2] = true
+}

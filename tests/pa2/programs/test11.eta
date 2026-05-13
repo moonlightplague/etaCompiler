@@ -1,0 +1,6 @@
+//dangling else
+main(){
+    if (a == b) c = b
+    else if (a == b) c = b
+    else c = b
+}

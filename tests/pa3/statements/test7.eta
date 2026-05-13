@@ -1,0 +1,8 @@
+// abnormal test case: while
+main(args: int[][]) {
+  x: int = 1
+  y: bool
+  y = true
+
+  while (x) x = x + 1
+}

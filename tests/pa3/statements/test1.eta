@@ -1,0 +1,4 @@
+// normal test case: empty
+main(args: int[][]) {
+  {}
+}

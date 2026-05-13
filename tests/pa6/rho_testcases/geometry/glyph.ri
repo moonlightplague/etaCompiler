@@ -1,0 +1,11 @@
+use geometry
+use palette
+
+record Glyph {
+    anchor: Point
+    tint: Color
+}
+
+makeGlyph(anchor: Point, tint: Color): Glyph
+moveGlyph(g: Glyph, dx: int, dy: int): Glyph
+retintGlyph(g: Glyph, tint: Color): Glyph

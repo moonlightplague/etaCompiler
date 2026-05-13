@@ -1,0 +1,3 @@
+Original: x, y, z = 1, 2, 3
+Swap x and y: x, y = 2, 1
+Swap xyz: x, y, z = 3, 2, 1

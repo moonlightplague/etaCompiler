@@ -1,0 +1,12 @@
+//10
+use io
+
+main(args:int[][]) {
+  x:int = 7
+  a:int = x
+  b:int = a
+  c:int = b
+  y:int = c + 3
+  printi(y)
+  println("")
+}

@@ -1,0 +1,54 @@
+//1410
+//3
+//3
+//134
+use io
+use conv
+
+fill2d(a:int[][]) {
+    i:int = 0
+    while i < length(a) {
+        j:int = 0
+        while j < length(a[i]) {
+            a[i][j] = i * 100 + j * 10 + (i + j)
+            j = j + 1
+        }
+        i = i + 1
+    }
+}
+
+sum2d(a:int[][]):int {
+    i:int = 0
+    total:int = 0
+    while i < length(a) {
+        j:int = 0
+        while j < length(a[i]) {
+            total = total + a[i][j]
+            j = j + 1
+        }
+        i = i + 1
+    }
+    return total
+}
+
+main(args:int[][]) {
+    n:int = 3
+    m:int = 4
+
+    grid:int[n][m]
+    fill2d(grid)
+
+    ragged:int[n][]
+    ragged[0] = {1, 2}
+    ragged[1] = {3, 4, 5}
+    ragged[2] = grid[1]
+
+    print(unparseInt(sum2d(grid)))
+    print("\n")
+    print(unparseInt(length(ragged)))
+    print("\n")
+    print(unparseInt(length(ragged[1])))
+    print("\n")
+    print(unparseInt(ragged[2][3]))
+    print("\n")
+}

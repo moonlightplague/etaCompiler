@@ -1,0 +1,2 @@
+//function applications
+do_something(1, 2, "Hello World", a + b) + print()

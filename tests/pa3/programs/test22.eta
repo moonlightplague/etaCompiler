@@ -1,0 +1,4 @@
+// EXPECT: FAIL (global initializers must be numeric/boolean/char literal only)
+x:int = 1 + 2
+
+main(args:int[][]) { }

@@ -1,0 +1,2 @@
+//abnormal test case for variables (no functions)
+f(1, 2, 3, 4)

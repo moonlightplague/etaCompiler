@@ -1,0 +1,6 @@
+// normal test case: wildcard
+main(args: int[][]) {
+  _ = 5
+  x: int = 1
+  _ = x
+}

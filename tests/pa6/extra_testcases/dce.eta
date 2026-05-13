@@ -1,0 +1,189 @@
+use io
+
+// Global variable: writes to this may be live if later read.
+g:int = 0
+
+// Pure helper with many dead local computations.
+// A liveness-based DCE should remove most of the useless assignments.
+pure_noise(x:int):int {
+    a:int = x + 1
+    b:int = a * 2
+    c:int = b + 100
+    d:int = c * c
+    e:int = d - b
+
+    // All overwritten before use.
+    a = 111
+    a = 222
+    a = 333
+
+    // Never used.
+    b = 444
+    c = 555
+    d = 666
+    e = 777
+
+    // Live result depends only on x.
+    r:int = x * x + 3
+    return r
+}
+
+// Another helper where many calculations are dead.
+// The return value is simple, but the body creates lots of dead IR.
+compute_live(x:int, y:int):int {
+    t0:int = x + y
+    t1:int = t0 * 10
+    t2:int = t1 + 99
+    t3:int = t2 / 3
+    t4:int = t3 % 7
+
+    // Dead chain.
+    dead1:int = t4 + 1000
+    dead2:int = dead1 * dead1
+    dead3:int = dead2 - dead1
+    dead4:int = dead3 + 42
+    dead5:int = dead4 * 5
+
+    // Overwrite dead values.
+    dead1 = 1
+    dead2 = 2
+    dead3 = 3
+    dead4 = 4
+    dead5 = 5
+
+    // This branch is unreachable after constant simplification.
+    if false {
+        z:int = x * 1000000
+        z = z + y
+        z = z * z
+        return z
+    }
+
+    // The actual live value.
+    return x + y
+}
+
+// Procedure with side effects.
+// Calls to this procedure must not be removed if reachable.
+touch_global(v:int) {
+    g = g + v
+
+    // Dead locals inside a side-effecting procedure.
+    a:int = v * 10
+    b:int = a + 1
+    c:int = b + 2
+    a = 0
+    b = 0
+    c = 0
+}
+
+// A loop containing many dead computations.
+// Only acc is live.
+loop_test(n:int):int {
+    i:int = 0
+    acc:int = 0
+
+    while i < n {
+        dead_a:int = i * 100
+        dead_b:int = dead_a + 17
+        dead_c:int = dead_b * dead_b
+        dead_d:int = dead_c - dead_a
+
+        // Dead overwrites.
+        dead_a = 1
+        dead_b = 2
+        dead_c = 3
+        dead_d = 4
+
+        // Live update.
+        acc = acc + i
+        i = i + 1
+    }
+
+    return acc
+}
+
+main(args:int[][]) {
+    println("DCE stress test start")
+
+    x:int = 10
+    y:int = 20
+
+    // Dead assignments: x is repeatedly overwritten before being read.
+    x = 100
+    x = 200
+    x = 300
+    x = 10
+
+    // Dead locals never used.
+    unused0:int = x + y
+    unused1:int = unused0 * 2
+    unused2:int = unused1 + 999
+    unused3:int = unused2 / 3
+    unused4:int = unused3 % 5
+
+    unused0 = 0
+    unused1 = 0
+    unused2 = 0
+    unused3 = 0
+    unused4 = 0
+
+    // Unreachable branch. Everything inside is dead if constant branches are removed.
+    if false {
+        println("ERROR: unreachable print")
+        x = 99999
+        y = 88888
+        touch_global(1000000)
+    }
+
+    // Reachable branch. This print must remain.
+    if true {
+        println("reachable branch")
+        touch_global(5)
+    } else {
+        println("ERROR: unreachable else")
+        touch_global(999)
+    }
+
+    // Useless pure function result.
+    // Conservative DCE may keep this call unless you do purity/interprocedural analysis.
+    _ = pure_noise(12345)
+
+    // Live computation.
+    live1:int = compute_live(x, y)
+    live2:int = loop_test(6)
+
+    // More dead assignments after live values are already computed.
+    trash:int = live1 * live2
+    trash = trash + 1
+    trash = trash + 2
+    trash = trash + 3
+    trash = 0
+
+    // Array code: assignments to arr are live only if later read.
+    arr:int[4]
+    arr[0] = live1
+    arr[1] = live2
+    arr[2] = g
+    arr[3] = 999
+
+    // Dead scalar computations using array reads.
+    tmp0:int = arr[3] * 100
+    tmp1:int = tmp0 + 1
+    tmp2:int = tmp1 + 2
+    tmp0 = 0
+    tmp1 = 0
+    tmp2 = 0
+
+    // Live final result:
+    // live1 = 30
+    // live2 = 0 + 1 + 2 + 3 + 4 + 5 = 15
+    // g = 5
+    // result = 30 + 15 + 5 = 50
+    result:int = arr[0] + arr[1] + arr[2]
+
+    println("result should be 50")
+    printi(result)
+    println("")
+    println("DCE stress test end")
+}

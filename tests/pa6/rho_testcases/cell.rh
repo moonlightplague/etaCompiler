@@ -1,0 +1,9 @@
+record Cell {
+    value: int
+}
+
+main(args: int[][]) {
+    cell: Cell = null
+    numbers: int[] = null
+    value: int = null
+}

@@ -1,0 +1,10 @@
+sum(a:int, b:int):int
+sub(a:int, b:int):int
+mul(a:int, b:int):int
+divmod(a:int, b:int):int, int
+pack(a:int, b:int, c:int, d:int, e:int, f:int, g:int, h:int):int[]
+unpack(xs:int[]):int, int, int, int
+mk2d(r:int, c:int):int[][]
+row(A:int[][], i:int):int[]
+col(A:int[][], j:int):int[]
+noop()

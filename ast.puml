@@ -1,0 +1,230 @@
+@startuml ast
+skinparam classAttributeIconSize 0
+left to right direction
+
+' --- Base Node ---
+abstract class ASTNode {
+    + ~ASTNode()
+    + {abstract} toString(indent: int) : string
+}
+
+' --- Top Level & Program Structure ---
+class Use {
+    + id : string
+    + toString(indent: int) : string
+}
+
+class Program {
+    + use_clauses : vector<unique_ptr<Use>>
+    + definitions : vector<unique_ptr<Definition>>
+    + toString(indent: int) : string
+}
+
+class Interface {
+    + method_interfaces : vector<unique_ptr<MethodInterface>>
+    + toString(indent: int) : string
+}
+
+class MethodInterface {
+    + id : string
+    + declarations : vector<Declaration>
+    + return_types : vector<unique_ptr<EtaTypeNode>>
+    + toString(indent: int) : string
+}
+
+class Method {
+    + header : unique_ptr<MethodInterface>
+    + body : unique_ptr<BlockStatement>
+    + toString(indent: int) : string
+}
+
+class GlobalDeclaration {
+    + declaration : unique_ptr<Declaration>
+    + value : unique_ptr<Expression>
+    + toString(indent: int) : string
+}
+
+ASTNode <|-- Use
+ASTNode <|-- Program
+ASTNode <|-- Interface
+ASTNode <|-- MethodInterface
+ASTNode <|-- Method
+ASTNode <|-- GlobalDeclaration
+
+' --- Types ---
+abstract class EtaTypeNode {
+}
+
+enum BaseType {
+    Integer
+    Boolean
+}
+EtaTypeNode +-- BaseType
+
+class BaseTypeNode {
+    + type : BaseType
+    + toString(indent: int) : string
+}
+
+class ArrayTypeNode {
+    + dimension : unique_ptr<Expression>
+    + subtype : unique_ptr<EtaTypeNode>
+    + toString(indent: int) : string
+}
+
+ASTNode <|-- EtaTypeNode
+EtaTypeNode <|-- BaseTypeNode
+EtaTypeNode <|-- ArrayTypeNode
+
+' --- Expressions ---
+abstract class Expression {
+}
+
+enum UnaryOperand {
+    Minus
+    Bang
+}
+
+enum BinaryOperand {
+    Multiply, HighMultiply, Divide, Mod,
+    Plus, Minus, LessThan, LessThanEqual,
+    GreaterThan, GreaterThanEqual, Equal,
+    NotEqual, And, Or, ArrayAccess
+}
+
+Expression +-- UnaryOperand
+Expression +-- BinaryOperand
+
+class UnaryExpression {
+    + op : UnaryOperand
+    + expr : unique_ptr<Expression>
+    + toString(indent: int) : string
+}
+
+class BinaryExpression {
+    + op : BinaryOperand
+    + left : unique_ptr<Expression>
+    + right : unique_ptr<Expression>
+    + toString(indent: int) : string
+}
+
+class ArrayInitializerExpression {
+    + exprs : vector<unique_ptr<Expression>>
+    + toString(indent: int) : string
+}
+
+class FunctionApplicationExpression {
+    + id : string
+    + exprs : vector<unique_ptr<Expression>>
+    + toString(indent: int) : string
+}
+
+class IdentifierExpression {
+    + id : string
+    + toString(indent: int) : string
+}
+
+class BoolLiteralExpression {
+    + value : bool
+    + toString(indent: int) : string
+}
+
+class IntLiteralExpression {
+    + value : int
+    + toString(indent: int) : string
+}
+
+class StringLiteralExpression {
+    + value : string
+    + toString(indent: int) : string
+}
+
+class CharLiteralExpression {
+    + value : string
+    + toString(indent: int) : string
+}
+
+ASTNode <|-- Expression
+Expression <|-- UnaryExpression
+Expression <|-- BinaryExpression
+Expression <|-- ArrayInitializerExpression
+Expression <|-- FunctionApplicationExpression
+Expression <|-- IdentifierExpression
+Expression <|-- BoolLiteralExpression
+Expression <|-- IntLiteralExpression
+Expression <|-- StringLiteralExpression
+Expression <|-- CharLiteralExpression
+
+' --- Statements ---
+abstract class Statement {
+}
+
+class ReturnStatement {
+    + exprs : vector<unique_ptr<Expression>>
+    + toString(indent: int) : string
+}
+
+class IfStatement {
+    + condition : unique_ptr<Expression>
+    + then_branch : unique_ptr<Statement>
+    + else_branch : unique_ptr<Statement>
+    + toString(indent: int) : string
+}
+
+class WhileStatement {
+    + condition : unique_ptr<Expression>
+    + body : unique_ptr<Statement>
+    + toString(indent: int) : string
+}
+
+class BlockStatement {
+    + statements : vector<unique_ptr<Statement>>
+    + toString(indent: int) : string
+}
+
+class ProcedureCall {
+    + id : string
+    + arguments : vector<unique_ptr<Expression>>
+    + toString(indent: int) : string
+}
+
+class DeclarationStatement {
+    + declarations : vector<Declaration>
+    + toString(indent: int) : string
+}
+
+class AssignmentStatement {
+    + lvalues : vector<unique_ptr<LvalueNode>>
+    + rvalues : vector<unique_ptr<Expression>>
+    + toString(indent: int) : string
+}
+
+ASTNode <|-- Statement
+Statement <|-- ReturnStatement
+Statement <|-- IfStatement
+Statement <|-- WhileStatement
+Statement <|-- BlockStatement
+Statement <|-- ProcedureCall
+Statement <|-- DeclarationStatement
+Statement <|-- AssignmentStatement
+
+' --- LValues ---
+abstract class AssignmentLvalueNode {
+}
+
+class LvalueIdentifierNode {
+    + id : string
+    + toString(indent: int) : string
+}
+
+class LvalueArrayNode {
+    + dimension : unique_ptr<Expression>
+    + subIdentifier : unique_ptr<AssignmentLvalueNode>
+    + toString(indent: int) : string
+}
+
+ASTNode <|-- AssignmentLvalueNode
+AssignmentLvalueNode <|-- LvalueIdentifierNode
+AssignmentLvalueNode <|-- LvalueArrayNode
+
+@enduml

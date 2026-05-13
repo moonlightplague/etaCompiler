@@ -1,0 +1,44 @@
+//10
+//50
+//50
+//12
+//11
+//100
+use io
+use conv
+
+triple(n:int):int, int, int {
+    return n - 1, n, n + 1
+}
+
+rotate3(a:int, b:int, c:int):int, int, int {
+    return b, c, a
+}
+
+main(args:int[][]) {
+    xs:int[] = {10, 20, 30, 40, 50}
+    i:int = 1
+    j:int = 3
+
+    xs[i], xs[j] = xs[j], xs[i]
+
+    left:int, mid:int, right:int
+    left, mid, right = triple(11)
+
+    xs[0], x:int, _ = rotate3(xs[0], left, xs[4])
+    y:int, xs[4], z:int = rotate3(mid, xs[4], right)
+    _, keep:int, _ = triple(100)
+
+    print(unparseInt(xs[0]))
+    print("\n")
+    print(unparseInt(x))
+    print("\n")
+    print(unparseInt(y))
+    print("\n")
+    print(unparseInt(xs[4]))
+    print("\n")
+    print(unparseInt(z))
+    print("\n")
+    print(unparseInt(keep))
+    print("\n")
+}

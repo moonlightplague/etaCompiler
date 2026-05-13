@@ -1,0 +1,19 @@
+// testing if
+use io
+
+main(args: int[][]) {
+  if (true) println("should print")
+
+  if (false) println("should NOT print")
+
+  y: bool = true
+  y2: bool = false
+
+  if (y) println("should print")
+
+  if (!y) println("should NOT print")
+
+  if (y & y2) println("should NOT print")
+
+  if (y | y2) println("should print")
+}

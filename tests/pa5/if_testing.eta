@@ -1,0 +1,12 @@
+use io 
+use conv 
+
+main(arg:int[][]) {
+    x : int = 1 
+    if (x >= 0) {
+        println("y")
+    }
+    else {
+        println("n")
+    }
+}

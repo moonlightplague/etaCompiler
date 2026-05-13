@@ -1,0 +1,17 @@
+// The loop body is dominated by copy chains used in arithmetic.
+use io
+
+main(args:int[][]) {
+  i:int = 0
+  acc:int = 1
+  while i < 90000000 {
+    a:int = acc; b:int = a; c:int = b; d:int = c
+    e:int = d; f:int = e; g:int = f; h:int = g
+    acc = h + g + f + e + d + c + b + a + i
+    p:int = acc; q:int = p; r:int = q; s:int = r
+    acc = s + r + q + p + h
+    i = i + 1
+  }
+  printi(acc)
+  println("")
+}

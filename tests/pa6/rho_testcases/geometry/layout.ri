@@ -1,0 +1,10 @@
+use scene
+use geometry
+
+record Layout {
+    scene: Scene
+    offset: Point
+}
+
+makeLayout(scene: Scene, offset: Point): Layout
+layoutScore(layout: Layout): int

@@ -1,0 +1,10 @@
+// EXPECT: FAIL 
+use F
+
+x:int = 0
+
+a(x:int):int {
+  return x
+}
+
+main(args:int[][]) { }

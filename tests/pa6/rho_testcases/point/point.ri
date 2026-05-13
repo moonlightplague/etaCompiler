@@ -1,0 +1,10 @@
+record Point {
+    x:int
+    y:int
+}
+
+createPoint(x: int, y: int): Point
+
+pointX(p: Point): int
+
+pointY(p: Point): int

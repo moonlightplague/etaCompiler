@@ -1,0 +1,23 @@
+use io
+use convention
+
+// Global declaration
+limit: int = 100
+flag:bool = true
+
+main(args: int[][]) {
+    current: int = 50
+    flag: bool = true
+
+    // Function call and conditional logic
+    if (current < limit) {
+        print("Within limits")
+        current = current + 10
+    } else {
+        flag = false
+    }
+
+    // Return statement (void return implied for main if omitted,
+    // but explicit return is safer to test)
+    return
+}

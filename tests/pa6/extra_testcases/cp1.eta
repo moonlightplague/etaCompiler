@@ -1,0 +1,15 @@
+//8
+use io
+
+main(args:int[][]) {
+  flag:bool = true
+  x:int = 0
+  if flag {
+    x = 7
+  } else {
+    x = 99
+  }
+  y:int = x + 1
+  printi(y)
+  println("")
+}

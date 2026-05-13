@@ -1,0 +1,5 @@
+divmod(a:int, b:int):int, int
+mk2d(r:int, c:int):int[][]
+len(xs:int[]):int
+isEven(x:int):bool
+dbg(msg:int[])

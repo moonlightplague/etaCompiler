@@ -1,0 +1,3 @@
+main(): int {
+    a: int = '\x{12FFFF}';
+}

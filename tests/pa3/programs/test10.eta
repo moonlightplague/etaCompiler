@@ -1,0 +1,26 @@
+// EXPECT: OK
+make_identity():int[][] {
+  return {{1, 0}, {0, 1}}
+}
+
+main(args:int[][]) {
+  b:int[3][4]   
+
+  i:int = 0
+  while i < 3 {
+    j:int = 0
+    while j < 4 {
+      b[i][j] = i*10 + j
+      j = j + 1
+    }
+    i = i + 1
+  }
+
+  a:int[][]     
+  a = b  
+
+  c:int[3][]
+  c[0], c[1], c[2] = b[0], b[1], b[2]
+
+  d:int[][] = make_identity()
+}

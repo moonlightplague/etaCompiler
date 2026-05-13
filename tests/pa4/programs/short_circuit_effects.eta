@@ -1,0 +1,30 @@
+//2
+use io
+use conv
+
+ticks:int = 0
+
+bumpTrue():bool {
+    ticks = ticks + 1
+    return true
+}
+
+bumpFalse():bool {
+    ticks = ticks + 1
+    return false
+}
+
+main(args:int[][]) {
+    a:bool = false & bumpTrue()
+    b:bool = true | bumpFalse()
+    c:bool = true & bumpTrue()
+    d:bool = false | bumpFalse()
+
+    if a | b & c | d {
+        print(unparseInt(ticks))
+        print("\n")
+    } else {
+        print(unparseInt(-1))
+        print("\n")
+    }
+}

@@ -1,0 +1,9 @@
+use io
+use conv
+
+a : int[] = "Hello World!\n"
+b : bool = true
+
+main() {
+    println(a);
+}

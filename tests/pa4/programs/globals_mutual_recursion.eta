@@ -1,0 +1,59 @@
+//5
+//11
+//flip=0
+use io
+use conv
+
+calls:int = 0
+parityFlip:bool = false
+store:int[]
+
+main(args:int[][]) {
+    store = {0, 0, 0, 0, 0, 0}
+
+    if isEven(4) {
+        record(0)
+    } else {
+        record(1)
+    }
+
+    if isOdd(5) {
+        record(2)
+    } else {
+        record(3)
+    }
+
+    print(unparseInt(store[0]))
+    print("\n")
+    print(unparseInt(store[2]))
+    print("\n")
+
+    if parityFlip {
+        println("flip=1")
+    } else {
+        println("flip=0")
+    }
+}
+
+isEven(n:int):bool {
+    calls = calls + 1
+    if n == 0 {
+        return true
+    } else {
+        return isOdd(n - 1)
+    }
+}
+
+isOdd(n:int):bool {
+    calls = calls + 1
+    if n == 0 {
+        return false
+    } else {
+        return isEven(n - 1)
+    }
+}
+
+record(n:int) {
+    store[n] = calls
+    parityFlip = !parityFlip
+}

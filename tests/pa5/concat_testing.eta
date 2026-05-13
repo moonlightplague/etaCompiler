@@ -1,0 +1,13 @@
+use io 
+use conv 
+
+// tests optimized ir generator
+main(arg:int[][]) {
+    a : int[] = {1}
+    c : int[] = {3}
+    a = a + c
+    b : int = length(a)
+    println(unparseInt(b)) // 2
+    println(unparseInt(a[0])) // 1
+    println(unparseInt(a[1])) // 3
+}

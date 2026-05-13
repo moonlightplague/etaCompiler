@@ -1,0 +1,9 @@
+use app
+
+record Summary {
+    origin: Point
+    marker: Glyph
+}
+
+summarize(scene: Scene, marker: Glyph, fallback: Point, seed: int): Summary
+summaryValue(summary: Summary): int

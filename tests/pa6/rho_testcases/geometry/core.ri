@@ -1,0 +1,21 @@
+record Point {
+    x, y: int
+}
+
+record Color {
+    r, g, b: int
+}
+
+record Node {
+    value: int
+    next: Node
+}
+
+makePoint(x: int, y: int): Point
+pointX(p: Point): int
+pointY(p: Point): int
+
+makeColor(r: int, g: int, b: int): Color
+colorWeight(c: Color): int
+
+makeNode(value: int, next: Node): Node

@@ -1,0 +1,2 @@
+//more complicated stuff to test precedence
+1 + 2 *>> 3 - 4 + -3

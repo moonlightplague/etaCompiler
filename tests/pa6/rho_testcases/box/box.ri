@@ -1,0 +1,6 @@
+record Box {
+    value: int
+}
+
+makeBox(value: int): Box
+boxValue(box: Box): int

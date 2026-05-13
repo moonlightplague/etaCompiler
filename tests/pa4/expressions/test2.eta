@@ -1,0 +1,11 @@
+// test and/or short circuiting
+use io
+
+main(args: int[][]) {
+  x: bool = true
+  y: bool = false
+  x_and_y: bool = x & y;
+  x_or_y: bool = x | y;
+  if (x_and_y) println("x_and_y is true")
+  if (x_or_y) println("x_or_y is true")
+}

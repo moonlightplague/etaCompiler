@@ -1,0 +1,6 @@
+// normal test case: multiple assignment
+main(args: int[][]) {
+  z: int = 2
+  y: int
+  x: int, y = 5, z
+}

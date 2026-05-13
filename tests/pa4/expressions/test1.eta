@@ -1,0 +1,11 @@
+// testing bool expressions and bang operator
+use io
+
+main(args: int[][]) {
+  x: bool = true
+  y: bool = false
+  not_x: bool = !x
+  not_y: bool = !y
+  if (not_x) println("not_x is true")
+  if (not_y) println("not_y is true")
+}

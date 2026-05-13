@@ -1,0 +1,8 @@
+// EXPECT: OK 
+use F
+use F
+
+main(args:int[][]) {
+  y:int = id(123)
+  ping()
+}

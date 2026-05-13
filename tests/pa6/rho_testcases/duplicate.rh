@@ -1,0 +1,9 @@
+record Duplicate {
+    value: int
+    next: Duplicate
+    value: bool
+}
+
+main(args: int[][]) {
+    d: Duplicate = null
+}

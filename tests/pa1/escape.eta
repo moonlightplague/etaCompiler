@@ -1,0 +1,2 @@
+// Testing escape characters
+s: int[] = "Hello\\World\'\n\'\x{1F604}";

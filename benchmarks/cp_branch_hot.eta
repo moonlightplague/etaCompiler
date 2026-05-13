@@ -1,0 +1,19 @@
+// Constant propagation should make the hot branch unconditional.
+use io
+
+main(args:int[][]) {
+  i:int = 0
+  live:int = 5
+  flag:bool = true
+  a:int,b:int,c:int = 19,23,29
+  while i < 150000000 {
+    if flag {
+      live = live + a * b + c + i
+    } else {
+      live = live + a * b * c - i
+    }
+    i = i + 1
+  }
+  printi(live)
+  println("")
+}

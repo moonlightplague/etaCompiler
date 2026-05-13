@@ -1,0 +1,22 @@
+use io
+
+// Function returning two values
+calculate(a: int, b: int): int, bool {
+    sum: int = a + b
+    is_positive: bool = sum > 0
+    return sum, is_positive
+}
+
+process_data() {
+    // Array declaration with size
+    values: int[5]
+
+    // Array assignment
+    values[0] = 42
+
+    // Character literal usage
+    marker: int = 'x'
+
+    // Method call ignoring return values (as a statement)
+    calculate(values[0], marker)
+}

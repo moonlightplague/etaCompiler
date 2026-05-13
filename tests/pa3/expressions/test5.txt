@@ -1,0 +1,2 @@
+//third abnormal test case for arithmetic expressions
+1 + -true

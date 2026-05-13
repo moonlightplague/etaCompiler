@@ -1,0 +1,21 @@
+// testing return statements (and function declarations)
+use io
+
+f1(): int[] {
+  s: int[] = "f1"
+  return s
+}
+
+f2(): int[], int[] {
+  s1: int[] = "[first f2,"
+  s2: int[] = "second f2]"
+  return s1, s2
+}
+
+main(args: int[][]) {
+  s: int[] = f1()
+  println(s)
+
+  s1: int[], s2: int[] = f2()
+  println(s1 + s2)
+}

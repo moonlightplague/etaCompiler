@@ -1,0 +1,13 @@
+//10
+use io
+
+main(args:int[][]) {
+  run:bool = false
+  x:int = 4
+  while run {
+    x = x * 100
+  }
+  y:int = x + 6
+  printi(y)
+  println("")
+}

@@ -1,0 +1,2 @@
+//abnormal test case for variables (no functions)
+1 + x

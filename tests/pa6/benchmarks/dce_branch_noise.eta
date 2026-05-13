@@ -1,0 +1,19 @@
+// Dead branch-local arithmetic dominates the loop body.
+use io
+
+main(args:int[][]) {
+  i:int = 0
+  live:int = 1
+  dead:int = 7
+  while i < 160000000 {
+    if i % 2 == 0 {
+      dead = live * 3 + i; dead = dead * dead + 17
+    } else {
+      dead = live * 5 - i; dead = dead * dead - 23
+    }
+    live = live + i
+    i = i + 1
+  }
+  printi(live)
+  println("")
+}

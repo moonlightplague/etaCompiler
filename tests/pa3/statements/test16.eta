@@ -1,0 +1,6 @@
+// abnormal test case: multiple assignment
+main(args: int[][]) {
+  x: int = 5
+  y: bool = true
+  y, x = x, y
+}

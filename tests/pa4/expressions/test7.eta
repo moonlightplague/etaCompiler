@@ -1,0 +1,8 @@
+// testing array intializer
+use io
+
+main(args: int[][]) {
+  x: int[] = {1,2,3}
+  y: int[] = "hello"
+  println(y)
+}

@@ -1,0 +1,11 @@
+// testing bool array
+use io
+use conv
+
+main(args: int[][]) {
+  arr: bool[] = {true, false, true}
+  l: int = length(arr)
+  arr2: bool[] = {false, true}
+  arr3: bool[] = arr + arr2
+  println("length of arr3: " + unparseInt(length(arr3)))
+}

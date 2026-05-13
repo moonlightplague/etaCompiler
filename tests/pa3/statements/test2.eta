@@ -1,0 +1,7 @@
+// normal test case: block
+main(args: int[][]) {
+  {
+    x: int = 1
+    x = x + 1
+  }
+}

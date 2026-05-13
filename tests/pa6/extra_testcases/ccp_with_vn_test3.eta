@@ -1,0 +1,68 @@
+//Test 3 result:
+//1000000
+
+use io
+
+main(args:int[][]) {
+    n:int = 1000000
+    i:int = 0
+    acc:int = 0
+
+    while i < n {
+        // Constant chain. CCP should collapse all of this.
+        k0:int = 123456
+        k1:int = k0
+        k2:int = k1
+        k3:int = k2
+        k4:int = k3
+        k5:int = k4
+        k6:int = k5
+        k7:int = k6
+        k8:int = k7
+        k9:int = k8
+
+        cond0:bool = k9 == 123456
+        cond1:bool = cond0
+        cond2:bool = cond1
+
+        if cond2 {
+            // This is the only live update.
+            acc = acc + 1
+        } else {
+            // Unreachable expensive block.
+            // If CCP removes it, generated code should be much smaller.
+            j:int = 0
+            while j < 100 {
+                t0:int = j * 99991
+                t1:int = t0 + k9
+                t2:int = t1 * t1
+                t3:int = t2 / 7
+                t4:int = t3 % 123
+                acc = acc + t4
+                j = j + 1
+            }
+        }
+
+        // Dead arithmetic depending only on constants.
+        // CCP can fold it; DCE should remove it.
+        d0:int = k9 * 3
+        d1:int = d0 + 17
+        d2:int = d1 * d1
+        d3:int = d2 - d0
+        d4:int = d3 / 5
+        d5:int = d4 % 97
+
+        d0 = 0
+        d1 = 0
+        d2 = 0
+        d3 = 0
+        d4 = 0
+        d5 = 0
+
+        i = i + 1
+    }
+
+    println("Test 3 result:")
+    printi(acc)
+    println("")
+}

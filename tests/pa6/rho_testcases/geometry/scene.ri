@@ -1,0 +1,10 @@
+use glyph
+use chain
+
+record Scene {
+    root: Glyph
+    nodes: Node
+}
+
+makeScene(root: Glyph, nodes: Node): Scene
+sceneWeight(scene: Scene): int

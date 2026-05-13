@@ -1,0 +1,6 @@
+x :int[];
+
+foo(x :int) :int
+{
+   return x;
+}

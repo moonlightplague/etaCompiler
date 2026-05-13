@@ -1,0 +1,2 @@
+// Testing to ensure that identifiers are parsed correctly
+hello1_world2'__ : string = "Foo?123 Bar?";

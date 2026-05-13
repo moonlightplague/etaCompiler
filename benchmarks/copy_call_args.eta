@@ -1,0 +1,21 @@
+// Copy propagation should collapse aliases before repeated calls.
+use io
+
+mix(a:int,b:int,c:int,d:int):int {
+  return a * 3 + b * 5 + c * 7 + d * 11
+}
+
+main(args:int[][]) {
+  i:int = 0
+  seed:int = 9
+  total:int = 0
+  while i < 50000000 {
+    a:int = seed; b:int = a; c:int = b; d:int = c
+    e:int = i; f:int = e; g:int = f; h:int = g
+    total = total + mix(d,c,b,a) + mix(h,g,f,e)
+    seed = total + d + h
+    i = i + 1
+  }
+  printi(total + seed)
+  println("")
+}

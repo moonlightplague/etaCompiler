@@ -1,0 +1,2 @@
+//array expressions
+a[0][0] + 'b'

@@ -1,0 +1,12 @@
+use io
+
+compute(val: int): int {
+    // ERROR 1: Unbalanced parenthesis in expression
+    result: int = (val * 2 + 5
+
+    if (result > 10) {
+        return 1
+    // ERROR 2: Missing closing brace for the if-statement
+
+    return 0
+} // Closing brace for method

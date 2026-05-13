@@ -1,0 +1,2 @@
+//normal test case for length expressions
+length({1, 2, 3}) + length({{1, 2, 3}, {4, 5}}) + length({{{1}}}[0]) + length({true, false}) + length({}) + length({}[0])

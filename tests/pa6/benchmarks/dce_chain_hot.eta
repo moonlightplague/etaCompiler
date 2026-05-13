@@ -1,0 +1,18 @@
+// The unused chain should disappear, leaving only the live accumulator.
+use io
+
+main(args:int[][]) {
+  i:int = 0
+  live:int = 0
+  dead:int = 11
+  while i < 160000000 {
+    dead = live + i
+    dead = dead * 3 + 17
+    dead = dead * dead - i
+    dead = dead / 5 + 29
+    live = live + i
+    i = i + 1
+  }
+  printi(live)
+  println("")
+}

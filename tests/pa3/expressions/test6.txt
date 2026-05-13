@@ -1,0 +1,2 @@
+//normal test case for boolean expressions
+true | false & !(true | false)

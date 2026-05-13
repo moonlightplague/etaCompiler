@@ -1,0 +1,4 @@
+// normal test case: {}[0] is coerced into an array type, which length() can be called on
+f() {
+  _ = length({}[0])
+}

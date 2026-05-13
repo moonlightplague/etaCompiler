@@ -1,0 +1,22 @@
+// test integer binary arithmetic expressions
+use io
+use conv
+
+main(args: int[][]) {
+  x: int = 1
+  y: int = 2
+  println("x = 1, y = 2")
+  result: int;
+  result = x - y
+  println("x - y = " + unparseInt(result))
+  result = x + y
+  println("x + y = " + unparseInt(result))
+  result = x * y
+  println("x * y = " + unparseInt(result))
+  result = x *>> y
+  println("x *>> y = " + unparseInt(result))
+  result = x / y
+  println("x / y = " + unparseInt(result))
+  result = x % y
+  println("x % y = " + unparseInt(result))
+}

@@ -1,0 +1,6 @@
+// normal test: checking assign
+main(args: int[][]) {
+  x: int = 1
+  y: int
+  y = x
+}

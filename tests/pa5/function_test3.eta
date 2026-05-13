@@ -1,0 +1,44 @@
+use io
+use conv
+
+// A simple leaf function. It uses standard arithmetic, which 
+// will quickly overwrite values in caller-saved registers.
+add_mul(a: int, b: int): int {
+    return (a + b) * (a - b) 
+}
+
+// A function that forces a variable to live across a call.
+middle_man(x: int): int {
+    // 'x' arrives in rdi. 
+    // We call add_mul, which clobbers rax, rdi, rsi, rcx, rdx, r8, r9, etc.
+    // 'x' must be preserved across this call so it can be added to 'y' at the end.
+    y: int = add_mul(x, 2)
+    return y + x
+}
+
+// Function with 8 arguments: 6 passed in registers, 2 passed on the stack.
+consume_8(a: int, b: int, c: int, d: int, e: int, f: int, g: int, h: int): int {
+    return a - b + c - d + e - f + g - h
+}
+
+main(args: int[][]) {
+    // The monster call.
+    // Evaluating these arguments sequentially means the result of Arg 1 
+    // must survive the function calls of Args 2 through 8.
+    
+    res: int = consume_8(
+        middle_man(10),   // Arg 1: add_mul(10,2) = 96. middle_man = 96 + 10 = 106.
+        middle_man(20),   // Arg 2: add_mul(20,2) = 396. middle_man = 396 + 20 = 416.
+        add_mul(5, 3),    // Arg 3: 8 * 2 = 16.
+        add_mul(6, 4),    // Arg 4: 10 * 2 = 20.
+        middle_man(30),   // Arg 5: add_mul(30,2) = 896. middle_man = 896 + 30 = 926.
+        add_mul(7, 5),    // Arg 6: 12 * 2 = 24.
+        middle_man(40),   // Arg 7: add_mul(40,2) = 1596. middle_man = 1596 + 40 = 1636. (STACK ARG!)
+        add_mul(8, 6)     // Arg 8: 14 * 2 = 28. (STACK ARG!)
+    )
+
+    // Calculation:
+    // 106 - 416 + 16 - 20 + 926 - 24 + 1636 - 28 = 2196
+    
+    println(unparseInt(res)); // Expected Output: 2196
+}

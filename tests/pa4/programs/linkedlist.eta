@@ -1,0 +1,127 @@
+use io
+use conv
+
+// Creates a encapsulated doubly linked list "object"
+// Returns an int[][] where:
+// [0] = values, [1] = next pointers, [2] = prev pointers, [3] = state
+create_list(initial_capacity: int): int[][] {
+    // Allocate the outer array of pointers
+    list: int[4][]
+
+    // Allocate the inner parallel arrays
+    val: int[initial_capacity]
+    next_ptr: int[initial_capacity]
+    prev_ptr: int[initial_capacity]
+
+    // Use an array constructor for the state [cite: 169]
+    // state = {head, tail, free, capacity}
+    state: int[] = { -1, -1, 0, initial_capacity }
+
+    list[0] = val
+    list[1] = next_ptr
+    list[2] = prev_ptr
+    list[3] = state
+
+    return list
+}
+
+// Resizes the underlying arrays by doubling their capacity
+resize_list(list: int[][]) {
+    old_cap: int = list[3][3]
+    new_cap: int = old_cap * 2
+
+    // Allocate new, larger arrays on the heap
+    new_val: int[new_cap]
+    new_next: int[new_cap]
+    new_prev: int[new_cap]
+
+    old_val: int[] = list[0]
+    old_next: int[] = list[1]
+    old_prev: int[] = list[2]
+
+    // Copy existing elements over
+    i: int = 0
+    while i < old_cap {
+        new_val[i] = old_val[i]
+        new_next[i] = old_next[i]
+        new_prev[i] = old_prev[i]
+        i = i + 1
+    }
+
+    // Mutate the "object" pointers to point to the new arrays
+    list[0] = new_val
+    list[1] = new_next
+    list[2] = new_prev
+    list[3][3] = new_cap
+}
+
+// Appends a value to the encapsulated list, resizing if necessary
+append(list: int[][], v: int) {
+    free: int = list[3][2]
+    cap: int = list[3][3]
+
+    // Check if we need to resize
+    if free >= cap {
+        resize_list(list)
+    }
+
+    // Re-read free pointer in case it changed (though it shouldn't have)
+    free = list[3][2]
+
+    // Extract arrays and state for readability
+    val: int[] = list[0]
+    next_ptr: int[] = list[1]
+    prev_ptr: int[] = list[2]
+    head: int = list[3][0]
+    tail: int = list[3][1]
+
+    new_node: int = free
+    list[3][2] = free + 1 // Update free pointer
+
+    val[new_node] = v
+    next_ptr[new_node] = -1
+    prev_ptr[new_node] = tail
+
+    if tail != -1 {
+        next_ptr[tail] = new_node
+    }
+
+    if head == -1 {
+        list[3][0] = new_node // Update head
+    }
+
+    list[3][1] = new_node // Update tail
+}
+
+// Traverses the encapsulated list forward
+traverse_forward(list: int[][]) {
+    val: int[] = list[0]
+    next_ptr: int[] = list[1]
+    curr: int = list[3][0] // Head is stored in list[3][0]
+
+    print("Forward traversal:  ")
+    while curr != -1 {
+        print(unparseInt(val[curr]))
+        print(" ")
+        curr = next_ptr[curr]
+    }
+    print("end.")
+    println("")
+}
+
+main(args: int[][]) {
+    // Start with a tiny capacity of 2 to intentionally force multiple resizes
+    my_list: int[][] = create_list(2)
+
+    print("Appending elements and forcing dynamic resizes...\n")
+
+    append(my_list, 10)
+    append(my_list, 20)
+    append(my_list, 30) // Triggers first resize (capacity 2 -> 4)
+    append(my_list, 40)
+    append(my_list, 50) // Triggers second resize (capacity 4 -> 8)
+    append(my_list, 60)
+    append(my_list, 70)
+
+    traverse_forward(my_list)
+}

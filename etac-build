@@ -1,0 +1,12 @@
+# generate antlr4 code
+cd src
+java -jar ../tools/antlr.jar -Dlanguage=Cpp -o generated etaLex.g4 -no-listener -no-visitor
+java -jar ../tools/antlr.jar -Dlanguage=Cpp -o generated etaParse.g4 -visitor
+cd ..
+
+# build etac
+mkdir -p build
+cd build
+cmake ..
+cmake --build .
+cp etac ..

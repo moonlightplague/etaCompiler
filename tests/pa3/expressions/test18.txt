@@ -1,0 +1,2 @@
+//normal test case for array indexing (to test type coercion)
+{}[0] + 1

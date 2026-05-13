@@ -1,0 +1,2 @@
+//normal test case for array initializer
+{{true, false}, {true}, {}}

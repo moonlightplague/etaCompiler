@@ -1,0 +1,21 @@
+// test integer binary comparison expressions
+use io
+
+main(args: int[][]) {
+  x: int = 1
+  y: int = 2
+  println("x = 1, y = 2")
+  result: bool;
+  result = x > y
+  if (result) println("x > y")
+  result = x < y
+  if (result) println("x < y")
+  result = x >= y
+  if (result) println("x >= y");
+  result = x <= y
+  if (result) println("x <= y");
+  result = x == y
+  if (result) println("x == y");
+  result = x != y
+  if (result) println("x != y");
+}

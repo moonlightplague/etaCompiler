@@ -1,0 +1,37 @@
+//Test 1 result:
+//45
+
+use io
+
+main(args:int[][]) {
+    a:int = 6
+    b:int = 7
+    c:int = a * b
+
+    flag:bool = c == 42
+    result:int = 0
+
+    if flag {
+        result = c + 1
+    } else {
+        // Unreachable. A good CCP + DCE pipeline should remove this.
+        bad:int = 1 / 0
+        result = bad
+    }
+
+    if !flag {
+        // Unreachable.
+        result = result + 1000000
+    } else {
+        result = result + 2
+    }
+
+    while false {
+        // Completely unreachable loop.
+        result = result + 999999
+    }
+
+    println("Test 1 result:")
+    printi(result)
+    println("")
+}

@@ -1,0 +1,17 @@
+// Loop-invariant constants should collapse a long arithmetic chain.
+use io
+
+main(args:int[][]) {
+  i:int = 0
+  live:int = 0
+  a:int,b:int,c:int,d:int,e:int = 17,31,43,59,71
+  while i < 150000000 {
+    x:int = a * b + c * d - e
+    y:int = x + a * c - b * e
+    z:int = y * 3 - a + c
+    live = live + z + i
+    i = i + 1
+  }
+  printi(live)
+  println("")
+}

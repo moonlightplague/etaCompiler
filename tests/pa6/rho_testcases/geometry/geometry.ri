@@ -1,0 +1,4 @@
+use core
+
+translatePoint(p: Point, dx: int, dy: int): Point
+manhattanDistance(a: Point, b: Point): int

@@ -1,0 +1,237 @@
+// Expected output:
+// agent = stress-bot
+// route score = 184
+// route steps = 5
+// route ok = false
+// last = (20,30)
+// bucket count = 5
+// bucket checksum = 81
+// bucket through 13 = 68
+// bounds area = 600
+// grid visited = 15
+// grid score = 66
+// route length = 6
+
+use io
+use conv
+
+record Point {
+    x, y: int
+}
+
+record Bounds {
+    lo: Point
+    hi: Point
+}
+
+record Node {
+    value: int
+    next: Node
+}
+
+record Bucket {
+    head: Node
+    count: int
+    checksum: int
+}
+
+record Agent {
+    name: int[]
+    pos: Point
+    bounds: Bounds
+    route: Point[]
+    bucket: Bucket
+    active: bool
+}
+
+record Report {
+    score: int
+    steps: int
+    ok: bool
+    last: Point
+}
+
+boolText(b: bool): int[] {
+    if (b) {
+        return "true"
+    }
+    return "false"
+}
+
+clonePoint(p: Point): Point {
+    return Point(p.x, p.y)
+}
+
+pointText(p: Point): int[] {
+    return "(" + unparseInt(p.x) + "," + unparseInt(p.y) + ")"
+}
+
+makeBounds(x0: int, y0: int, x1: int, y1: int): Bounds {
+    b: Bounds = Bounds(Point(x0, y0), Point(x1, y1))
+    normalizeBounds(b)
+    return b
+}
+
+normalizeBounds(b: Bounds) {
+    if (b.lo.x > b.hi.x) {
+        t: int = b.lo.x
+        b.lo.x = b.hi.x
+        b.hi.x = t
+    }
+    if (b.lo.y > b.hi.y) {
+        t: int = b.lo.y
+        b.lo.y = b.hi.y
+        b.hi.y = t
+    }
+}
+
+boundsArea(b: Bounds): int {
+    return (b.hi.x - b.lo.x) * (b.hi.y - b.lo.y)
+}
+
+clampPoint(p: Point, b: Bounds): bool {
+    changed: bool = false
+    if (p.x < b.lo.x) {
+        p.x = b.lo.x
+        changed = true
+    }
+    if (p.y < b.lo.y) {
+        p.y = b.lo.y
+        changed = true
+    }
+    if (p.x > b.hi.x) {
+        p.x = b.hi.x
+        changed = true
+    }
+    if (p.y > b.hi.y) {
+        p.y = b.hi.y
+        changed = true
+    }
+    return changed
+}
+
+push(b: Bucket, value: int) {
+    b.head = Node(value, b.head)
+    b.count = b.count + 1
+    b.checksum = b.checksum + value
+}
+
+fillBucket(b: Bucket) {
+    push(b, 5)
+    push(b, 8)
+    push(b, 13)
+    push(b, 21)
+    push(b, 34)
+}
+
+bucketStats(b: Bucket): int, int {
+    return b.count, b.checksum
+}
+
+sumUntil(front: Node, stop: int): int {
+    total: int
+    current: Node = front
+    while (current != null) {
+        total = total + current.value
+        if (current.value == stop) {
+            break
+        }
+        current = current.next
+    }
+    return total
+}
+
+seedRoute(): Point[] {
+    return {
+        Point(3, 4),
+        null,
+        Point(5, 9),
+        Point(8, 15),
+        Point(13, 24),
+        Point(21, 37)
+    }
+}
+
+makeAgent(name: int[]): Agent {
+    b: Bounds = makeBounds(20, 30, 0, 0)
+    bucket: Bucket = Bucket(null, 0, 0)
+    fillBucket(bucket)
+    return Agent(name, Point(0, 0), b, seedRoute(), bucket, true)
+}
+
+walk(a: Agent, limit: int): Report {
+    score, i, steps, skipped: int
+    while (i < length(a.route)) {
+        target: Point = a.route[i]
+        if (target == null) {
+            skipped = skipped + 1
+        } else {
+            a.pos.x = target.x
+            a.pos.y = target.y
+            if (clampPoint(a.pos, a.bounds)) {
+                a.active = false
+            }
+            score = score + a.pos.x * 2 + a.pos.y + skipped
+            steps = steps + 1
+            if (score > limit) {
+                break
+            }
+        }
+        i = i + 1
+    }
+    return Report(score, steps, a.active, clonePoint(a.pos))
+}
+
+gridScan(b: Bounds): int, int {
+    x, y, visited, total: int
+    x = b.lo.x
+    while (x <= b.hi.x) {
+        y = b.lo.y
+        while (y <= b.hi.y) {
+            if (x * y > 40) {
+                break
+            }
+            visited = visited + 1
+            if ((x + y) % 3 == 0) {
+                total = total + x + y
+            }
+            y = y + 5
+        }
+        if (total > 100) {
+            break
+        }
+        x = x + 4
+    }
+    return visited, total
+}
+
+printSummary(agent: Agent, report: Report) {
+    println("agent = " + agent.name)
+    println("route score = " + unparseInt(report.score))
+    println("route steps = " + unparseInt(report.steps))
+    println("route ok = " + boolText(report.ok))
+    println("last = " + pointText(report.last))
+}
+
+main(args: int[][]) {
+    agent: Agent = makeAgent("stress-bot")
+    report: Report = walk(agent, 130)
+    printSummary(agent, report)
+
+    count, checksum: int
+    count, checksum = bucketStats(agent.bucket)
+    println("bucket count = " + unparseInt(count))
+    println("bucket checksum = " + unparseInt(checksum))
+    println("bucket through 13 = " + unparseInt(sumUntil(agent.bucket.head, 13)))
+    println("bounds area = " + unparseInt(boundsArea(agent.bounds)))
+
+    visited, grid: int
+    visited, grid = gridScan(agent.bounds)
+    println("grid visited = " + unparseInt(visited))
+    println("grid score = " + unparseInt(grid))
+
+    _, check: int = bucketStats(agent.bucket)
+    if (check == checksum) {
+        println("route length = " + unparseInt(length(agent.route)))
+    }
+}
