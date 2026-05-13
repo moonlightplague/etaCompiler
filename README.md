@@ -20,8 +20,6 @@ directly from the repository root.
 - `runtime/` - Eta runtime library and linker support
 - `tests/` - all current test cases and `ethScript` files
 - `tools/` - ANTLR and IR interpreter jars
-- `output/` - ignored local compiler output
-- `diagnose/` - ignored local diagnostic output
 
 ## Prerequisites
 
@@ -43,17 +41,6 @@ bash etac-build
 This script regenerates the ANTLR lexer/parser sources, configures CMake,
 builds the compiler, builds the Eta runtime, and copies the resulting `etac`
 binary to `./etac`.
-
-You can also build manually:
-
-```sh
-cmake -G Ninja -B build
-cmake --build build
-cp build/etac .
-```
-
-The CMake build includes the `eta_runtime` target. The runtime artifacts are
-generated under `runtime/` and ignored by Git.
 
 ## Running
 
@@ -142,14 +129,3 @@ For a quick direct integration check without `eth`, run:
 
 That script compiles `tests/pa6/extra_testcases/sort.eta` directly to
 `output/binary` and executes it.
-
-## Regenerating ANTLR Sources
-
-`etac-build` handles this automatically. To regenerate manually:
-
-```sh
-cd src
-java -jar ../tools/antlr.jar -Dlanguage=Cpp -o generated etaLex.g4 -no-listener -no-visitor
-java -jar ../tools/antlr.jar -Dlanguage=Cpp -o generated etaParse.g4 -visitor
-cd ..
-```
