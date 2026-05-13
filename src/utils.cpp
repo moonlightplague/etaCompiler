@@ -194,9 +194,9 @@ std::vector<std::string> find_interface_files(const std::string& directory) {
   return interface_files;
 }
 
-std::ofstream open_output(const std::string& source_filename,
-                          const std::string& directory,
-                          const CompilerMode& compiler_mode) {
+fs::path output_path_for(const std::string& source_filename,
+                         const std::string& directory,
+                         const CompilerMode& compiler_mode) {
   fs::path input_path(source_filename);
 
   fs::path dir_path = directory.empty() ? fs::path(".") : fs::path(directory);
@@ -224,6 +224,15 @@ std::ofstream open_output(const std::string& source_filename,
       output_path.replace_extension(".s");
       break;
   }
+
+  return output_path;
+}
+
+std::ofstream open_output(const std::string& source_filename,
+                          const std::string& directory,
+                          const CompilerMode& compiler_mode) {
+  fs::path output_path =
+      output_path_for(source_filename, directory, compiler_mode);
 
   if (fs::path parent = output_path.parent_path(); !parent.empty()) {
     fs::create_directories(parent);

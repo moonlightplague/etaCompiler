@@ -24,6 +24,7 @@ add_custom_target(eta_runtime ALL
 add_executable(etac
     src/main.cpp
 )
+add_dependencies(etac eta_runtime)
 
 target_link_libraries(etac_backend PUBLIC
     etac_frontend

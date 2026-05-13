@@ -1,6 +1,9 @@
 #include <CLI11.hpp>
 #include <algorithm>
+#include <cstdlib>
+#include <filesystem>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include "antlr4-runtime.h"
@@ -15,6 +18,76 @@
 #include "parser_driver.hpp"
 #include "typechecker_driver.hpp"
 using namespace ssy38;
+
+namespace {
+
+std::string shell_quote(const std::filesystem::path& path) {
+  std::string input = path.string();
+  std::string output = "'";
+  for (const char c : input) {
+    if (c == '\'') {
+      output += "'\\''";
+    } else {
+      output += c;
+    }
+  }
+  output += "'";
+  return output;
+}
+
+std::filesystem::path find_runtime_dir(const char* argv0) {
+  const auto cwd_runtime = std::filesystem::current_path() / "runtime";
+  if (std::filesystem::exists(cwd_runtime / "libeta.a")) {
+    return cwd_runtime;
+  }
+
+  std::filesystem::path executable_path(argv0);
+  if (executable_path.has_parent_path()) {
+    const auto executable_runtime =
+        std::filesystem::absolute(executable_path).parent_path() / "runtime";
+    if (std::filesystem::exists(executable_runtime / "libeta.a")) {
+      return executable_runtime;
+    }
+  }
+
+  throw std::runtime_error(
+      "Eta runtime is not built. Run the CMake build first to produce runtime/libeta.a.");
+}
+
+std::filesystem::path default_binary_path(const std::string& output_dir) {
+  const std::filesystem::path dir =
+      output_dir.empty() ? std::filesystem::path(".")
+                         : std::filesystem::path(output_dir);
+  return dir / "binary";
+}
+
+void link_eta_binary(const std::vector<std::filesystem::path>& asm_paths,
+                     const std::filesystem::path& binary_path,
+                     const std::filesystem::path& runtime_dir) {
+  if (asm_paths.empty()) {
+    throw std::runtime_error("No assembly inputs were generated.");
+  }
+
+  if (const auto parent = binary_path.parent_path(); !parent.empty()) {
+    std::filesystem::create_directories(parent);
+  }
+
+  std::ostringstream cmd;
+  cmd << "gcc -fno-pie -no-pie -o " << shell_quote(binary_path);
+  for (const auto& asm_path : asm_paths) {
+    cmd << " " << shell_quote(asm_path);
+  }
+  cmd << " -L" << shell_quote(runtime_dir)
+      << " -L" << shell_quote(runtime_dir / "ncurses-6.3" / "lib")
+      << " -leta -lncurses -lpthread";
+
+  const int status = std::system(cmd.str().c_str());
+  if (status != 0) {
+    throw std::runtime_error("Linking generated assembly failed.");
+  }
+}
+
+}  // namespace
 
 bool cf = true;
 bool reg = true;
@@ -37,10 +110,11 @@ int main(int argc, char* argv[]) {
   bool typecheck_flag = false;
   bool irgen_flag = false;
   bool irrun_flag = false;
+  bool asmgen_flag = false;
   bool optimizations_flag = false;
   bool report_optimizations_flag = false;
 
-  std::string diagnosticDir, sourceDir, libDir, asmDir, targetOS;
+  std::string diagnosticDir, sourceDir, libDir, asmDir, targetOS, binaryPath;
   const std::vector<std::string> supportedOptimizationFlags = {
       "cf", "reg", "copy", "dce", "cp", "vn"};
   std::vector<std::string> optimizationFlags;
@@ -56,6 +130,7 @@ int main(int argc, char* argv[]) {
   app.add_flag("--irgen", irgen_flag, "Generate intermediate code");
   app.add_flag("--irrun", irrun_flag,
                "Generate and interpret intermediate code");
+  app.add_flag("--asmgen", asmgen_flag, "Generate assembly output");
   auto* optimizationOption =
       app.add_flag("-O", optimizations_flag,
                    "Select which optimizations to apply")
@@ -81,6 +156,9 @@ int main(int argc, char* argv[]) {
       ->type_name("<path>")
       ->default_val("");
   app.add_option("-d", asmDir, "Path to place generated assembly output files")
+      ->type_name("<path>")
+      ->default_val("");
+  app.add_option("-o", binaryPath, "Path to place generated executable binary")
       ->type_name("<path>")
       ->default_val("");
   app.add_option("-target", targetOS,
@@ -221,8 +299,27 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
-  ssy38::my_compiler::generate_asm_for_sources(
-      sources, sourceDir, libDir, asmDir);
+  if (asmgen_flag) {
+    ssy38::my_compiler::generate_asm_for_sources(
+        sources, sourceDir, libDir, asmDir);
+    return 0;
+  }
+
+  try {
+    const auto asm_paths = ssy38::my_compiler::generate_asm_paths_for_sources(
+        sources, sourceDir, libDir, asmDir);
+    const auto output_binary =
+        binaryPath.empty() ? default_binary_path(asmDir)
+                           : std::filesystem::path(binaryPath);
+    link_eta_binary(asm_paths, output_binary, find_runtime_dir(argv[0]));
+    for (const auto& asm_path : asm_paths) {
+      std::error_code ec;
+      std::filesystem::remove(asm_path, ec);
+    }
+  } catch (const std::exception& e) {
+    std::cout << e.what() << "\n";
+    return 1;
+  }
 
   return 0;
 }

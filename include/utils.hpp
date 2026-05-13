@@ -1,8 +1,10 @@
 #pragma once
 
 #include <cstdint>
+#include <filesystem>
 #include <format>
 #include <string>
+#include <vector>
 
 #include "antlr4-runtime.h"
 
@@ -117,6 +119,13 @@ std::string read_file(const std::string& source_filename,
 std::ofstream open_output(const std::string& source_filename,
                           const std::string& directory,
                           const CompilerMode& compiler_mode);
+
+/**
+ * Computes the output path used by open_output without opening the file.
+ */
+std::filesystem::path output_path_for(const std::string& source_filename,
+                                      const std::string& directory,
+                                      const CompilerMode& compiler_mode);
 
 /**
  * Frontend lexing/parsing/typechecking error definition.

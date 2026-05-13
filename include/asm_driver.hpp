@@ -1,4 +1,5 @@
 #pragma once
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -18,4 +19,14 @@ void generate_asm_for_sources(const std::vector<std::string>& sources,
                          const std::string& source_directory,
                          const std::string& lib_directory,
                          const std::string& asm_directory);
+
+/**
+ * Generates assembly for each source and returns the generated *.s paths.
+ * Throws if any source fails to compile.
+ */
+std::vector<std::filesystem::path> generate_asm_paths_for_sources(
+    const std::vector<std::string>& sources,
+    const std::string& source_directory,
+    const std::string& lib_directory,
+    const std::string& asm_directory);
 }  // namespace ssy38::my_compiler
