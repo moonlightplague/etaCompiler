@@ -1,80 +1,155 @@
-# Cornell Compiler Project
+# Eta Compiler
+
 Chenwei Hou (ch2352), Thomas Lu (cl2625), Steven Yu (ssy38)
 
-## Project Info
-Our compiler is written using C++23. We use CMake as our build system.
+## Overview
 
-All of our source code is under `src/`. The source code for third-party libraries is under `libs/`.
+This repository contains a C++23 Eta/Rho compiler. The compiler frontend, IR
+passes, assembly generation, register allocation, and driver live under `src/`
+and `include/`. Third-party source dependencies are kept under `libs/`, and the
+Eta runtime is under `runtime/`.
 
-### Using Docker
-We use the beta version of the provided VM. To pull the Docker image, run:
-```shell
-docker pull sileiren/cs4120-env-x86:v4
-```
-To run the Docker image, run:
-```shell
-docker run -it -v <absolute path to "shared">:/home/student/shared sileiren/cs4120-env-x86:v4
-```
+The old Docker-based workflow is deprecated. Build and test this project
+directly from the repository root.
 
-### Using ANTLR4
-We use ANTLR4 as our lexer/parser generator. To generate the lexer and parser code, we need to run `tools/antlr.jar` on the `src/etaLex.g4` and `src/etaParse.g4` files in `src/`:
-```shell
-java -jar ../tools/antlr.jar -Dlanguage=Cpp -o generated etaLex.g4 -no-listener -no-visitor
-java -jar ../tools/antlr.jar -Dlanguage=Cpp -o generated etaParse.g4 -visitor
-```
-After this command is run, the generated lexer/parser code will be found in `src/generated/`.
+## Project Layout
 
-## Project Structure
-- `include/` - header files
-- `libs/` - external libraries
-- `src/` - source code
-- `tests/` - tests
-- `tools/` - tools (i.e. ANTLR4 jar, IR Interpreter jar)
+- `include/` - compiler headers
+- `src/` - compiler implementation and generated ANTLR sources
+- `libs/` - vendored third-party libraries
+- `runtime/` - Eta runtime library and linker support
+- `tests/` - all current test cases and `ethScript` files
+- `tools/` - ANTLR and IR interpreter jars
+- `output/` - ignored local compiler output
+- `diagnose/` - ignored local diagnostic output
 
-## Building
-To build the `etac` compiler, make sure you have CMake and a compiler that supports C++23 on your computer.
+## Prerequisites
 
-The following command generates the lexer/parser code, builds the compiler using CMake, and copies the `./etac` executable to the root directory of this project.
-```shell
+- CMake 3.25 or newer
+- Ninja, or another CMake-supported build tool
+- A C++23-capable compiler
+- Java, for regenerating ANTLR sources and running `--irrun`
+- GCC/binutils, for linking generated assembly with the runtime
+- `eth`, for running the test harness scripts
+
+## Build
+
+From the repository root:
+
+```sh
 bash etac-build
 ```
 
+This script regenerates the ANTLR lexer/parser sources, configures CMake,
+builds the compiler, builds the Eta runtime, and copies the resulting `etac`
+binary to `./etac`.
+
+You can also build manually:
+
+```sh
+cmake -G Ninja -B build
+cmake --build build
+cp build/etac .
+```
+
+The CMake build includes the `eta_runtime` target. The runtime artifacts are
+generated under `runtime/` and ignored by Git.
+
 ## Running
-To run the `etac` compiler, just run the `./etac` executable in the following form:
-```shell
+
+Basic form:
+
+```sh
 ./etac [options] <source files>
 ```
-*If you are using `--irrun`, you must run the `./etac` executable in the root of the repo to ensure the command to run the interpreter JAR is correct.* 
+
+For a normal compile, `etac` now behaves like a C compiler: it generates
+assembly internally, links it against the Eta runtime, and writes an executable
+binary. If `-d <dir>` is provided and `-o` is not, the default executable is
+`<dir>/binary`.
+
+Example:
+
+```sh
+./etac \
+  -sourcepath tests/pa6/extra_testcases \
+  -libpath tests/pa6/extra_testcases \
+  -d output \
+  sort.eta
+
+./output/binary
+```
+
+Use `-o` to choose a binary path:
+
+```sh
+./etac -sourcepath tests/pa6/extra_testcases \
+  -libpath tests/pa6/extra_testcases \
+  -d output \
+  -o output/sort \
+  sort.eta
+```
+
+Use `--asmgen` to preserve the old assembly-only behavior:
+
+```sh
+./etac --asmgen \
+  -sourcepath tests/pa6/extra_testcases \
+  -libpath tests/pa6/extra_testcases \
+  -d output \
+  sort.eta
+```
+
+This writes `output/sort.s` and does not link a binary.
+
+Diagnostic modes still write their corresponding files:
+
+```sh
+./etac --lex       -D diagnose tests/pa1/add.eta
+./etac --parse     -D diagnose tests/pa2/programs/test1.eta
+./etac --typecheck -D diagnose -libpath tests/pa3 tests/pa3/programs/test1.eta
+./etac --irgen     -D diagnose -libpath tests/pa4 tests/pa4/programs/primes.eta
+```
+
+If you use `--irrun`, run `./etac` from the repository root so the interpreter
+jar path resolves correctly.
 
 ## Testing
-To test our code, we use the provided `eth` test harness. We provide test cases and a test script (`ethScript`) in `tests/pa1/`, `tests/pa2/`, `tests/pa3/`, `tests/pa4/`, `tests/pa5/`, and `tests/pa6/`.
 
-To run the tests for PA6, in the root of the repo, run the following command:
-```shell
-eth -runtimepath <runtime path> -compilerpath . -testpath ./tests/pa6 ./tests/pa6/ethScript
-```
+All active test cases are in `tests/`. Each assignment directory has an
+`ethScript` file that can be run from the repository root.
 
-To run the tests for PA5, in the root of the repo, run the following command:
-```shell
-eth -runtimepath <runtime path> -compilerpath . -testpath ./tests/pa5 ./tests/pa5/ethScript
-```
-
-To run the tests for PA4, in the root of the repo, run the following command:
-```shell
-eth -compilerpath . -testpath ./tests/pa4 ./tests/pa4/ethScript
-```
-
-To run the tests for PA3, in the root of the repo, run the following command:
-```shell
-eth -compilerpath . -testpath ./tests/pa3 ./tests/pa3/ethScript
-```
-
-To run the tests for PA2, in the root of the repo, run the following command:
-```shell
-eth -compilerpath . -testpath ./tests/pa2 ./tests/pa2/ethScript
-```
-
-To run the tests for PA1, in the root of the repo, run the following command:
-```shell
+```sh
 eth -compilerpath . -testpath ./tests/pa1 ./tests/pa1/ethScript
+eth -compilerpath . -testpath ./tests/pa2 ./tests/pa2/ethScript
+eth -compilerpath . -testpath ./tests/pa3 ./tests/pa3/ethScript
+eth -compilerpath . -testpath ./tests/pa4 ./tests/pa4/ethScript
+eth -compilerpath . -testpath ./tests/pa5 ./tests/pa5/ethScript
+eth -compilerpath . -testpath ./tests/pa6 ./tests/pa6/ethScript
+```
+
+The `tests/provided/` tree contains the provided tests. Run them the same way:
+
+```sh
+eth -compilerpath . -testpath ./tests/provided/pa6 ./tests/provided/pa6/ethScript
+```
+
+For a quick direct integration check without `eth`, run:
+
+```sh
+./run_single.sh
+```
+
+That script compiles `tests/pa6/extra_testcases/sort.eta` directly to
+`output/binary` and executes it.
+
+## Regenerating ANTLR Sources
+
+`etac-build` handles this automatically. To regenerate manually:
+
+```sh
+cd src
+java -jar ../tools/antlr.jar -Dlanguage=Cpp -o generated etaLex.g4 -no-listener -no-visitor
+java -jar ../tools/antlr.jar -Dlanguage=Cpp -o generated etaParse.g4 -visitor
+cd ..
 ```
