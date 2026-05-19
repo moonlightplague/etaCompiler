@@ -15,7 +15,7 @@ add_subdirectory(libs/antlr4/runtime/Cpp)
 add_subdirectory(src)
 
 add_custom_target(eta_runtime ALL
-    COMMAND ${MAKE_EXECUTABLE}
+    COMMAND ${MAKE_EXECUTABLE} core
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/runtime
     COMMENT "Building Eta runtime"
     USES_TERMINAL

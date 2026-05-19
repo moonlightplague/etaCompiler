@@ -30,7 +30,9 @@ CFLAGS_EXAMPLES = -masm=intel -O0 -fno-stack-protector -fno-asynchronous-unwind-
 ABI_FLAG=$(shell ./platform-flags.sh)
 
 
-all: etafilt libeta.a examples/arr examples/fact $(QTETALIB)
+all: core $(QTETALIB)
+
+core: etafilt libeta.a examples/arr examples/fact
 
 etafilt: demangle/demangle.o
 	gcc $(ABI_FLAG) -o $@ $^
