@@ -14,10 +14,10 @@ echo "Running Compilation: "
 "./etac" \
     -sourcepath "$DIR" \
     -libpath "$DIR" \
-    --optcfg initial final \
-    --optir initial final \
     -D "$DIAGNOSE" \
     -d "$OUTPUT" \
+    --optcfg final \
+    --optir final \
     "${ETA_FILE}.${MODE}"
 
 echo "Running Execution: "

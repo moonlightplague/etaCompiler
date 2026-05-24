@@ -102,6 +102,7 @@ int main(int argc, char* argv[]) {
 
   CLI::App app{"etac"};
   app.allow_non_standard_option_names();
+  app.validate_optional_arguments();
   app.set_help_flag();
 
   bool help_flag = false;
